@@ -10,7 +10,7 @@
   --glass:rgba(255,255,255,0.68);--glass-b:rgba(255,255,255,0.85);
   --glass-s:0 4px 24px rgba(99,102,241,0.08);
   --blur:blur(20px) saturate(180%);--r:14px;
-  --accent:#6366f1;--accent2:#4f46e5;--accent-bg:#eef2ff;
+  --accent:#6366f1;--accent2:#4f46e5;
   --ok:#10b981;--err:#ef4444;--warn:#f59e0b;
   --tx:#1e293b;--tx2:#64748b;--bd:rgba(226,232,240,0.7);
 }
@@ -21,8 +21,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   background:rgba(255,255,255,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:500}
 #syncDot{width:7px;height:7px;border-radius:50%;background:#94a3b8;flex-shrink:0;transition:background .4s}
-#syncBar.ok #syncDot{background:#22c55e}
-#syncBar.busy #syncDot{background:#f59e0b;animation:dp 1s infinite}
+#syncBar.ok #syncDot{background:#22c55e}#syncBar.busy #syncDot{background:#f59e0b;animation:dp 1s infinite}
 #syncBar.err #syncDot{background:#ef4444}
 @keyframes dp{0%,100%{opacity:1}50%{opacity:.3}}
 #syncMsg{color:var(--tx2)}#syncBar.ok #syncMsg{color:#15803d}#syncBar.err #syncMsg{color:#dc2626}
@@ -40,64 +39,84 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   font-family:inherit;white-space:nowrap;font-weight:500}
 .tab:hover{color:var(--tx)}.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
 .sec{padding:24px;display:none}.sec.active{display:block}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
 .sec-title{font-size:16px;font-weight:700}
 .g{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--glass-s)}
 .btn{padding:8px 16px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;
   font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
 .btn-p{background:var(--accent);color:white}.btn-p:hover{background:var(--accent2)}
-.btn-p:disabled{background:#a5b4fc;cursor:not-allowed}
 .btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:6px}
 .btn-g{background:rgba(255,255,255,.7);color:var(--tx);border:1px solid var(--bd)}
 .btn-g:hover{background:rgba(255,255,255,.95)}.btn-g:disabled{opacity:.4;cursor:not-allowed}
-.btn-d{background:#fef2f2;color:var(--err);border:1px solid #fecaca}
-.btn-d:hover{background:#fee2e2}
-.btn-s{background:#f0fdf4;color:var(--ok);border:1px solid #bbf7d0}
-.btn-s:hover{background:#dcfce7}
+.btn-d{background:#fef2f2;color:var(--err);border:1px solid #fecaca}.btn-d:hover{background:#fee2e2}
+.btn-s{background:#f0fdf4;color:var(--ok);border:1px solid #bbf7d0}.btn-s:hover{background:#dcfce7}
+.btn-ok{background:var(--ok);color:white}.btn-ok:hover{background:#059669}
 .inp{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;font-size:13px;
   background:rgba(255,255,255,.7);color:var(--tx);font-family:inherit;outline:none;
   transition:border-color .2s;width:100%}
 .inp:focus{border-color:var(--accent)}
-.fbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.fbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .tbl-wrap{overflow-x:auto;border-radius:var(--r)}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--tx2);
   text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd);
   background:rgba(248,250,252,.6);white-space:nowrap}
-tbody td{padding:11px 14px;border-bottom:1px solid rgba(226,232,240,.45)}
+tbody td{padding:10px 12px;border-bottom:1px solid rgba(226,232,240,.45);vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:rgba(255,255,255,.4)}
+tbody tr:hover td{background:rgba(255,255,255,.45)}
+tr.tr-returned td{opacity:.6}
+tr.tr-future td{background:rgba(254,249,195,.35)}
+tr.tr-overdue td{background:rgba(254,226,226,.35)}
+tr.tr-topup td{background:rgba(240,253,244,.35)}
 .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px}
 .gift-card{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   border:1px solid var(--glass-b);border-radius:var(--r);padding:14px;
   cursor:pointer;transition:all .2s;box-shadow:var(--glass-s)}
 .gift-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.14)}
 .gift-thumb{width:100%;height:96px;border-radius:8px;background:#f1f5f9;
-  display:flex;align-items:center;justify-content:center;font-size:36px;
-  margin-bottom:10px;overflow:hidden}
+  display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:10px;overflow:hidden}
 .gift-thumb img{width:100%;height:100%;object-fit:cover}
 .gift-name{font-size:13px;font-weight:600;margin-bottom:6px}
 .gift-row{display:flex;align-items:center;justify-content:space-between}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
 .b-ok{background:#f0fdf4;color:#16a34a}.b-low{background:#fef2f2;color:#dc2626}
-.b-out{background:#f1f5f9;color:#94a3b8}
+.b-out{background:#f1f5f9;color:#94a3b8}.b-warn{background:#fefce8;color:#a16207}
+.b-info{background:#eff6ff;color:#1d4ed8}.b-purple{background:#f5f3ff;color:#7c3aed}
 .mc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .mc{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   border:1px solid var(--glass-b);border-radius:12px;padding:16px;text-align:center;box-shadow:var(--glass-s)}
-.mc.av{border-color:rgba(16,185,129,.3)}.mc.bw{border-color:rgba(239,68,68,.3)}
-.fund-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
-.fstat{padding:18px;text-align:center}
-.fstat-lbl{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px}
-.fstat-val{font-size:24px;font-weight:800;margin-top:4px}
+.mc.av{border-color:rgba(16,185,129,.4)}.mc.bw{border-color:rgba(239,68,68,.4)}.mc.res{border-color:rgba(245,158,11,.4)}
+.mchk-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.mchk{display:flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--bd);
+  border-radius:8px;cursor:pointer;transition:all .18s;user-select:none;font-size:13px;font-weight:500}
+.mchk:hover:not(.mchk-unavail){border-color:var(--accent);background:#eef2ff}
+.mchk.mchk-on{border-color:var(--accent);background:#eef2ff;color:var(--accent)}
+.mchk-unavail{border-color:#fecaca;background:#fef2f2;cursor:not-allowed;opacity:.7;color:var(--err)}
+.mchk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.mchk-dot.av{background:var(--ok)}.mchk-dot.bw{background:var(--err)}.mchk-dot.res{background:var(--warn)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat-c{padding:18px;text-align:center;border-left:3px solid transparent}
+.stat-c.sc-blue{border-color:var(--accent)}.stat-c.sc-green{border-color:var(--ok)}
+.stat-c.sc-orange{border-color:var(--warn)}.stat-c.sc-red{border-color:var(--err)}
+.stat-num{font-size:28px;font-weight:800;line-height:1}
+.sc-blue .stat-num{color:var(--accent)}.sc-green .stat-num{color:var(--ok)}
+.sc-orange .stat-num{color:var(--warn)}.sc-red .stat-num{color:var(--err)}
+.stat-lbl{font-size:11px;color:var(--tx2);margin-top:5px}
 .stabs{display:flex;gap:0;margin-bottom:16px;background:rgba(241,245,249,.7);
   border-radius:10px;padding:4px;width:fit-content}
 .stab{padding:7px 20px;border:none;background:none;border-radius:8px;font-size:13px;
   cursor:pointer;font-family:inherit;color:var(--tx2);transition:all .15s;font-weight:500}
 .stab.active{background:white;color:var(--tx);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.mc-info{display:flex;gap:28px;padding:16px 20px;margin-bottom:16px}
+.mc-info-hdr{display:flex;gap:28px;padding:16px 20px;margin-bottom:16px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .mci-lbl{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px}
 .mci-val{font-size:15px;font-weight:700;margin-top:2px}
+.sop-note{font-size:12px;color:var(--tx2);margin-top:2px;line-height:1.5}
+.fund-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.fstat{padding:18px;text-align:center}
+.fstat-lbl{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px}
+.fstat-val{font-size:24px;font-weight:800;margin-top:4px}
 .ov{position:fixed;inset:0;background:rgba(15,23,42,.4);
   backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
   z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
@@ -105,30 +124,32 @@ tbody tr:hover td{background:rgba(255,255,255,.4)}
 .modal{background:rgba(255,255,255,.94);backdrop-filter:blur(24px) saturate(200%);
   -webkit-backdrop-filter:blur(24px) saturate(200%);border:1px solid rgba(255,255,255,.9);
   border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.14);
-  width:100%;max-width:460px;max-height:92vh;overflow-y:auto}
+  width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
 .m-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 0}
 .m-title{font-size:15px;font-weight:700}
 .m-close{width:28px;height:28px;border-radius:50%;border:none;background:#f1f5f9;
   cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--tx2)}
 .m-close:hover{background:#e2e8f0}
 .m-body{padding:18px 22px 22px}
-.fg{margin-bottom:13px}
-.fl{display:block;font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:4px;
-  text-transform:uppercase;letter-spacing:.3px}
+.fg{margin-bottom:13px}.fl{display:block;font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fa{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:52px 24px;color:var(--tx2);gap:8px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px;color:var(--tx2);gap:8px}
 .empty-ico{font-size:38px;opacity:.35}
 .amt-in{color:var(--ok);font-weight:600}.amt-out{color:var(--err);font-weight:600}
+.eq-card{margin-bottom:14px;padding:16px}
+.eq-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 #toast{position:fixed;bottom:22px;right:22px;z-index:2000;display:flex;flex-direction:column;gap:8px}
 .ti{padding:11px 17px;border-radius:12px;font-size:13px;font-weight:500;
   box-shadow:0 4px 16px rgba(0,0,0,.12);animation:tsin .18s ease;backdrop-filter:blur(12px)}
 @keyframes tsin{from{transform:translateX(18px);opacity:0}to{transform:translateX(0);opacity:1}}
 .ti-ok{background:rgba(240,253,244,.96);color:#15803d;border:1px solid #bbf7d0}
 .ti-err{background:rgba(254,242,242,.96);color:#dc2626;border:1px solid #fecaca}
-.eq-card{margin-bottom:14px;padding:16px}
-.eq-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sort-btn{background:rgba(255,255,255,.7);border:1px solid var(--bd);border-radius:8px;
+  padding:5px 12px;font-size:12px;cursor:pointer;color:var(--tx2);font-family:inherit;
+  transition:all .15s;white-space:nowrap}
+.sort-btn:hover{background:rgba(255,255,255,.95)}
+th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -146,6 +167,8 @@ tbody tr:hover td{background:rgba(255,255,255,.4)}
   <button class="tab"        id="tab-supplies" onclick="switchTab('supplies')">📦 文具器材</button>
   <button class="tab"        id="tab-fund"     onclick="switchTab('fund')">💰 公基金</button>
 </div>
+
+<!-- ═══ GIFTS ═══ -->
 <div class="sec active" id="sec-gifts">
   <div class="sec-hdr"><div class="sec-title">🎁 禮品庫存</div>
     <button class="btn btn-p btn-sm" onclick="openGiftModal(null)">＋ 新增品項</button></div>
@@ -158,24 +181,79 @@ tbody tr:hover td{background:rgba(255,255,255,.4)}
   </div>
   <div id="giftGrid" class="gift-grid"></div>
 </div>
+
+<!-- ═══ MACHINES ═══ -->
 <div class="sec" id="sec-machines">
-  <div class="sec-hdr"><div class="sec-title">💳 刷卡機借用</div>
-    <button class="btn btn-p btn-sm" onclick="openBorrowModal()">＋ 新增借用</button></div>
+  <div class="sec-hdr">
+    <div class="sec-title">💳 刷卡機借用</div>
+    <button class="btn btn-p btn-sm" onclick="openBorrowModal(null)">＋ 我要借刷卡機</button>
+  </div>
   <div class="mc-grid" id="machineCards"></div>
-  <div class="g tbl-wrap"><table>
-    <thead><tr><th>借用日期</th><th>借用人</th><th>部門</th><th>台數</th><th>預計歸還</th><th>狀態</th><th></th></tr></thead>
-    <tbody id="machineBody"></tbody>
-  </table></div>
+  <div class="g" style="margin-bottom:0">
+    <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--bd)">
+      <div style="font-size:14px;font-weight:700">借用紀錄</div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <input class="inp" id="mSearch" placeholder="搜尋借用人…" oninput="renderMachineTable()" style="width:130px;padding:5px 10px">
+        <select class="inp" id="mFilter" onchange="renderMachineTable()" style="width:auto;padding:5px 10px">
+          <option value="">全部紀錄</option>
+          <option value="active">借出中／待確認</option>
+          <option value="returned">已歸還</option>
+          <option value="future">未來預約</option>
+        </select>
+        <button class="sort-btn" id="mSortBtn" onclick="toggleMSort()">📅 新→舊</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>歸還</th>
+        <th class="sortable" onclick="toggleMSort()">借用日期 <span id="mSortArrow">↓</span></th>
+        <th>時間</th><th>借用人</th><th>台數</th><th>機器編號</th>
+        <th>使用地點</th><th>領取地點</th><th>歸還日期</th><th>備註</th><th>操作</th>
+      </tr></thead>
+      <tbody id="machineBody"></tbody>
+    </table></div>
+  </div>
 </div>
+
+<!-- ═══ MEAL CARD ═══ -->
 <div class="sec" id="sec-mealcard">
-  <div class="sec-hdr"><div class="sec-title">🍽 餐卡管理</div>
-    <button class="btn btn-p btn-sm" onclick="openMealModal()">＋ 新增月費</button></div>
-  <div class="g mc-info" id="mealInfo"></div>
-  <div class="g tbl-wrap"><table>
-    <thead><tr><th>月份</th><th>金額（元）</th><th>備註</th><th></th></tr></thead>
-    <tbody id="mealBody"></tbody>
-  </table></div>
+  <div class="sec-hdr"><div class="sec-title">🍽 餐卡管理</div></div>
+  <div class="g mc-info-hdr" id="mealInfoHdr">
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      <div><div class="mci-lbl">卡號</div><div class="mci-val" id="mcCardNo">AAX110676</div></div>
+      <div><div class="mci-lbl">掛帳部門</div><div class="mci-val" id="mcDept">人才發展課</div></div>
+      <div><div class="mci-lbl">加值 SOP</div><div class="sop-note">填 BPM-BA 單 → 受文者 Emily Wu → 帶卡儲值</div></div>
+    </div>
+    <button class="btn btn-g btn-sm" onclick="openMealSettings()">⚙ 卡片設定</button>
+  </div>
+  <div class="stat-row" id="mealStats"></div>
+  <div class="g">
+    <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--bd)">
+      <div style="font-size:14px;font-weight:700">刷卡紀錄</div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <input class="inp" id="mlSearch" placeholder="搜尋訪客／品名…" oninput="renderMealTable()" style="width:145px;padding:5px 10px">
+        <select class="inp" id="mlFilter" onchange="renderMealTable()" style="width:auto;padding:5px 10px">
+          <option value="">全部紀錄</option><option value="topup">僅儲值</option><option value="swipe">僅消費</option>
+        </select>
+        <button class="sort-btn" id="mlSortBtn" onclick="toggleMlSort()">📅 新→舊</button>
+        <button class="btn btn-s btn-sm" onclick="openMealModal('topup',null)">＋ 儲值</button>
+        <button class="btn btn-p btn-sm" onclick="openMealModal('swipe',null)">＋ 新增消費</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th class="sortable" onclick="toggleMlSort()">日期 <span id="mlSortArrow">↓</span></th>
+        <th>訪客姓名</th><th>購買品名</th>
+        <th>儲值金額</th><th>儲值人</th>
+        <th>刷卡金額</th><th>刷卡人</th>
+        <th>卡片餘額</th><th>備註</th><th>操作</th>
+      </tr></thead>
+      <tbody id="mealBody"></tbody>
+    </table></div>
+  </div>
 </div>
+
+<!-- ═══ SUPPLIES ═══ -->
 <div class="sec" id="sec-supplies">
   <div class="sec-hdr"><div class="sec-title">📦 文具器材</div>
     <div style="display:flex;gap:8px">
@@ -190,6 +268,8 @@ tbody tr:hover td{background:rgba(255,255,255,.4)}
   <div id="sup-equip"></div>
   <div id="sup-stat" style="display:none"></div>
 </div>
+
+<!-- ═══ FUND ═══ -->
 <div class="sec" id="sec-fund">
   <div class="sec-hdr"><div class="sec-title">💰 LD 內部公基金</div>
     <button class="btn btn-p btn-sm" onclick="openFundModal()">＋ 新增記錄</button></div>
@@ -199,18 +279,122 @@ tbody tr:hover td{background:rgba(255,255,255,.4)}
     <tbody id="fundBody"></tbody>
   </table></div>
 </div>
+
 <div class="ov" id="ov"><div class="modal" id="mbox"></div></div>
 <div id="toast"></div>
+
 <script>
 const JSONBIN_KEY='$2a$10$fWi18E.Cxec0L.WTEKjaU.ALZtnW4bCjzLiJBfG9QdwXChzY5OR12';
-const JSONBIN_BIN='6a6301c2f5f4af5e29b9f057';
+const JSONBIN_BIN='6a66db80f5f4af5e29c5fe27';
 const BIN_URL=`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`;
 const BIN_HDR={'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY};
 const SKEY='ld_mgmt_v1';
+
 const DEF={
-  gifts:[],
-  machines:{total:4,records:[]},
-  mealCard:{cardNo:'AAX110676',dept:'人才發展課',records:[]},
+  gifts:[
+    {id:'g1',name:'7-11中杯美式提貨卡',category:'禮品',location:'立德8F',qty:25,minQty:10,note:'',records:[
+      {date:'2020-12-23',qty:137,purpose:'活動使用',by:'Louis'},
+      {date:'2021-10-06',qty:5,purpose:'TechTalk',by:'Renee'},
+      {date:'2021-12-08',qty:5,purpose:'TechTalk',by:'Renee'},
+      {date:'2023-12-28',qty:8,purpose:'DT抽獎',by:'Stacy'},
+      {date:'2024-12-18',qty:8,purpose:'DT決賽',by:'Phyllis'},
+      {date:'2026-02-12',qty:6,purpose:'HR專班',by:'Alan'},
+      {date:'2026-04-13',qty:6,purpose:'訪談',by:'Stacy'}
+    ]},
+    {id:'g2',name:'ASUS 油性原字筆',category:'禮品',location:'立德8F',qty:0,minQty:10,note:'',records:[
+      {date:'2025-08-14',qty:20,purpose:'課程',by:'EvaSJ Chen'}
+    ]},
+    {id:'g3',name:'ROG識別證帶_款1',category:'禮品',location:'立德8F',qty:200,minQty:20,note:'',records:[]},
+    {id:'g4',name:'ROG識別證帶_款2',category:'禮品',location:'立德8F',qty:15,minQty:10,note:'',records:[
+      {date:'2025-06-20',qty:25,purpose:'GTP',by:'Lauren'},
+      {date:'2025-07-03',qty:2,purpose:'自留',by:'Amy/Shirley'},
+      {date:'2025-07-24',qty:8,purpose:'活力營',by:'Amy'}
+    ]},
+    {id:'g5',name:'識別證帶_藍',category:'禮品',location:'立德8F',qty:0,minQty:10,note:'',records:[
+      {date:'2026-05-04',qty:300,purpose:'文化活動',by:'Elsie'}
+    ]},
+    {id:'g6',name:'ROG零錢包',category:'禮品',location:'立德8F',qty:5,minQty:5,note:'',records:[]},
+    {id:'g7',name:'ROG運動毛巾',category:'禮品',location:'立德8F',qty:5,minQty:5,note:'',records:[
+      {date:'2025-12-10',qty:3,purpose:'DT總決賽-觀眾問答',by:'Stacy'}
+    ]},
+    {id:'g8',name:'ROG Shopping Bag',category:'禮品',location:'立德3F',qty:90,minQty:15,note:'',records:[
+      {date:'2025-07-16',qty:1,purpose:'裝教具',by:'Amy'},
+      {date:'2025-07-18',qty:3,purpose:'裝禮品to Lauren',by:'Amy'},
+      {date:'2025-07-23',qty:1,purpose:'裝教具to Stacy',by:'Amy'},
+      {date:'2025-07-23',qty:5,purpose:'搬家',by:'LD team'}
+    ]},
+    {id:'g9',name:'ROG 筆記本',category:'禮品',location:'立德3F',qty:30,minQty:15,note:'',records:[
+      {date:'2025-07-16',qty:100,purpose:'活動',by:'Lauren'},
+      {date:'2025-11-18',qty:9,purpose:'AI in HR活動',by:'Grace'},
+      {date:'2025-12-17',qty:8,purpose:'DT總決賽',by:'Irene/Stacy'},
+      {date:'2026-02-25',qty:30,purpose:'自學資源活動',by:'Alan'},
+      {date:'2026-06-29',qty:15,purpose:'GTP報到',by:'Lauren'}
+    ]},
+    {id:'g10',name:'網袋洗漱包',category:'禮品',location:'立德3F',qty:8,minQty:10,note:'',records:[
+      {date:'2025-07-16',qty:50,purpose:'活動',by:'Lauren'},
+      {date:'2026-02-25',qty:15,purpose:'自學資源活動',by:'Alan'},
+      {date:'2026-05-22',qty:10,purpose:'上台簡報技巧課程禮品',by:'Cindy'}
+    ]},
+    {id:'g11',name:'華碩DNA提袋',category:'禮品',location:'立德3F',qty:200,minQty:20,note:'',records:[]},
+    {id:'g12',name:'ASUS雨傘',category:'禮品',location:'立德8F',qty:19,minQty:5,note:'',records:[
+      {date:'2026-04-20',qty:2,purpose:'AI實驗室',by:'Alan'},
+      {date:'2026-05-21',qty:2,purpose:'AI實驗室',by:'Alan'},
+      {date:'2026-06-24',qty:2,purpose:'AI實驗室',by:'Alan'}
+    ]},
+    {id:'g13',name:'ASUS 環保提袋',category:'禮品',location:'立德8F',qty:10,minQty:3,note:'5藍+5綠',records:[]},
+    {id:'g14',name:'保溫杯',category:'禮品',location:'立德8F',qty:23,minQty:5,note:'',records:[
+      {date:'2026-05-22',qty:1,purpose:'上台簡報技巧課程禮品',by:'Cindy'}
+    ]},
+    {id:'g15',name:'環保吸管組',category:'禮品',location:'立功4F',qty:41,minQty:10,note:'',records:[]},
+    {id:'g16',name:'ASUS一卡通',category:'禮品',location:'立功4F',qty:297,minQty:20,note:'',records:[
+      {date:'2026-05-04',qty:22,purpose:'自學資源抽獎',by:'Alan'},
+      {date:'2026-05-04',qty:5,purpose:'與施先生有約',by:'Irene'},
+      {date:'2026-05-21',qty:2,purpose:'AI實驗室',by:'Alan'},
+      {date:'2026-06-23',qty:2,purpose:'AI實驗室',by:'Alan'}
+    ]},
+    {id:'g17',name:'無繩跳繩',category:'禮品',location:'立德3F',qty:0,minQty:5,note:'數量待確認',records:[]},
+    {id:'g18',name:'蛋杯',category:'禮品',location:'立德8F',qty:10,minQty:5,note:'Grace需求，先保留',records:[
+      {date:'2026-03-31',qty:15,purpose:'自學資源',by:'Alan'},
+      {date:'2026-06-03',qty:5,purpose:'自學資源',by:'Alan'}
+    ]},
+    {id:'g19',name:'ProArt帆布袋',category:'禮品',location:'立德8F',qty:60,minQty:10,note:'',records:[
+      {date:'2026-05-20',qty:15,purpose:'GPT',by:'Lauren'},
+      {date:'2026-06-16',qty:1,purpose:'',by:'Margo'}
+    ]},
+    {id:'g20',name:'ProArt筆記本',category:'禮品',location:'立德8F',qty:85,minQty:10,note:'',records:[
+      {date:'2026-05-20',qty:15,purpose:'GPT',by:'Lauren'}
+    ]},
+    {id:'c1',name:'ASUS 證書夾',category:'課程消耗品',location:'立德3F',qty:396,minQty:50,note:'',records:[
+      {date:'2025-08-06',qty:12,purpose:'channel MKT 活動',by:'NicolePC'},
+      {date:'2025-08-12',qty:3,purpose:'簽署活動使用',by:'Inori1 Chu'},
+      {date:'2025-08-25',qty:40,purpose:'Dr.ASUS',by:'Paddy'},
+      {date:'2025-09-02',qty:9,purpose:'GTP結業',by:'Lauren Hsu'},
+      {date:'2025-11-21',qty:40,purpose:'',by:'Stacy'}
+    ]}
+  ],
+  machines:{
+    total:4,
+    records:[
+      {id:'mr1', date:'2026-04-16',time:'',     borrower:'(早期紀錄)',   dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-04-16',notes:'',returned:true},
+      {id:'mr2', date:'2026-04-28',time:'10:30',borrower:'Wendy',        dept:'',count:1,machineNums:[1],  useLocation:'',             pickupLocation:'立德8F',returnDate:'2026-04-28',notes:'',returned:true},
+      {id:'mr3', date:'2026-05-05',time:'11:30',borrower:'Wendy',        dept:'',count:1,machineNums:[3],  useLocation:'',             pickupLocation:'立德8F',returnDate:'',          notes:'',returned:true},
+      {id:'mr4', date:'2026-05-05',time:'13:00',borrower:'Irene',        dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-05-07',notes:'精實思維_始計篇、與施先生有約',returned:true},
+      {id:'mr5', date:'2026-05-13',time:'15:00',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[1,4],useLocation:'立功1F-國際會議廳',pickupLocation:'立功4F',returnDate:'2026-05-14',notes:'前瞻技術論壇',returned:true},
+      {id:'mr6', date:'2026-05-04',time:'',     borrower:'文化月',       dept:'',count:1,machineNums:[2],  useLocation:'',             pickupLocation:'',     returnDate:'2026-05-29',notes:'文化月長借1個月',returned:true},
+      {id:'mr7', date:'2026-05-19',time:'13:00',borrower:'Irene',        dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'立功4F',returnDate:'',          notes:'精實思維_實戰篇',returned:true},
+      {id:'mr8', date:'2026-05-22',time:'09:30',borrower:'Cathy',        dept:'',count:1,machineNums:[4],  useLocation:'立功2F-A01會議室',pickupLocation:'立功4F',returnDate:'2026-05-22',notes:'專題講座',returned:true},
+      {id:'mr9', date:'2026-05-29',time:'',     borrower:'Candy',        dept:'',count:2,machineNums:[1,3],useLocation:'立德',         pickupLocation:'立德8F',returnDate:'2026-06-04',notes:'Op TekTrend',returned:true},
+      {id:'mr10',date:'2026-05-29',time:'',     borrower:'Mandy Lee',    dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-06-04',notes:'Computex TekTrend',returned:true},
+      {id:'mr11',date:'2026-06-12',time:'',     borrower:'Robert Lcc',   dept:'',count:2,machineNums:[2,4],useLocation:'',             pickupLocation:'立功4F',returnDate:'',          notes:'⚠ 尚未確認歸還',returned:false},
+      {id:'mr12',date:'2026-06-17',time:'',     borrower:'Sammi Chang',  dept:'',count:1,machineNums:[2],  useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'⚠ 尚未確認歸還',returned:false},
+      {id:'mr13',date:'2026-06-26',time:'09:30',borrower:'Cathy Sung',   dept:'',count:1,machineNums:[2],  useLocation:'立功2F-A01會議室',pickupLocation:'立功4F',returnDate:'2026-06-26',notes:'專題講座',returned:true},
+      {id:'mr14',date:'2026-07-03',time:'09:30',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[],   useLocation:'立功1F-國際會議廳',pickupLocation:'立功4F',returnDate:'2026-07-03',notes:'前瞻技術論壇',returned:false},
+      {id:'mr15',date:'2026-07-09',time:'11:45',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[],   useLocation:'',             pickupLocation:'立功4F',returnDate:'2026-07-09',notes:'',returned:false},
+      {id:'mr16',date:'2026-07-08',time:'',     borrower:'Sammi Chang',  dept:'',count:1,machineNums:[],   useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'',returned:false},
+      {id:'mr17',date:'2026-07-02',time:'',     borrower:'Alan',         dept:'',count:1,machineNums:[],   useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'趨勢講座',returned:false}
+    ]
+  },
+  mealCard:{cardNo:'AAX110676',dept:'人才發展課',initialBalance:0,nextId:100,records:[]},
   supplies:{
     equipment:[
       {id:'E001',name:'攝影機',total:2,location:'立德8F辦公室',records:[]},
@@ -226,46 +410,55 @@ const DEF={
     ]
   },
   fund:{records:[]},
-  _ids:{g:1,mr:1,ml:1,er:1,fr:1}
+  _ids:{g:300,mr:18,er:1,fr:1}
 };
+
 let state=JSON.parse(JSON.stringify(DEF));
 let curTab='gifts',supTab='equip',saveTimer=null,saving=false;
+let mSortAsc=false,mlSortAsc=false;
 
-function setSS(cls,msg){
-  const b=document.getElementById('syncBar'),t=document.getElementById('syncMsg');
-  if(b)b.className=cls;if(t)t.textContent=msg;
+function setSS(cls,msg){const b=document.getElementById('syncBar'),t=document.getElementById('syncMsg');if(b)b.className=cls;if(t)t.textContent=msg;}
+function mergeRemote(remote){
+  const base=JSON.parse(JSON.stringify(DEF));
+  if(remote.gifts&&remote.gifts.length>0)base.gifts=remote.gifts;
+  if(remote.machines&&remote.machines.records&&remote.machines.records.length>0)base.machines=remote.machines;
+  if(remote.mealCard){
+    if(remote.mealCard.records&&remote.mealCard.records.length>0)base.mealCard=remote.mealCard;
+    else base.mealCard=Object.assign(base.mealCard,{cardNo:remote.mealCard.cardNo||base.mealCard.cardNo,dept:remote.mealCard.dept||base.mealCard.dept,initialBalance:remote.mealCard.initialBalance||0,nextId:remote.mealCard.nextId||100,records:[]});
+  }
+  if(remote.supplies)base.supplies=remote.supplies;
+  if(remote.fund)base.fund=remote.fund;
+  if(remote._ids)base._ids=remote._ids;
+  return base;
 }
 async function loadData(rr){
   setSS('busy','同步中…');
   try{
     const r=await fetch(BIN_URL+'/latest',{headers:BIN_HDR});
     if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    if(d.record&&typeof d.record==='object')
-      state=Object.assign(JSON.parse(JSON.stringify(DEF)),d.record);
-    setSS('ok','✅ 已同步');
-    try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}
-    if(rr)renderAll();
+    const d=await r.json();const remote=d.record;
+    const hasData=remote&&remote.gifts&&remote.gifts.length>0;
+    if(hasData){
+      state=mergeRemote(remote);try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}
+      setSS('ok','✅ 已同步');if(rr)renderAll();
+    }else{
+      setSS('busy','首次初始化…');
+      try{await fetch(BIN_URL,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(state)});try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}setSS('ok','✅ 資料已初始化');}
+      catch(_){setSS('err','⚠️ 初始化失敗');}
+    }
   }catch(e){
-    try{const s=localStorage.getItem(SKEY);if(s)state=Object.assign(JSON.parse(JSON.stringify(DEF)),JSON.parse(s));}catch(_){}
-    setSS('err','⚠️ 離線模式（本機）');
+    try{const s=localStorage.getItem(SKEY);if(s)state=mergeRemote(JSON.parse(s));}catch(_){}
+    setSS('err','⚠️ 離線模式（本機）');if(rr)renderAll();
   }
 }
 async function _push(){
   if(saving){saveTimer=setTimeout(_push,800);return;}
   saving=true;setSS('busy','儲存中…');
-  try{
-    const r=await fetch(BIN_URL,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(state)});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    setSS('ok','✅ 已儲存');
-  }catch(e){setSS('err','⚠️ 儲存失敗');}
-  finally{saving=false;}
+  try{const r=await fetch(BIN_URL,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(state)});if(!r.ok)throw new Error();setSS('ok','✅ 已儲存');}
+  catch(e){setSS('err','⚠️ 儲存失敗（已本機備份）');}finally{saving=false;}
 }
-function save(){
-  try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}
-  clearTimeout(saveTimer);saveTimer=setTimeout(_push,1200);
-}
-function uid(k){if(!state._ids)state._ids={g:1,mr:1,ml:1,er:1,fr:1};return state._ids[k]++;}
+function save(){try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}clearTimeout(saveTimer);saveTimer=setTimeout(_push,1200);}
+function uid(k){if(!state._ids)state._ids={g:300,mr:18,er:1,fr:1};return state._ids[k]++;}
 function switchTab(tab){
   curTab=tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -274,43 +467,32 @@ function switchTab(tab){
   document.getElementById('sec-'+tab).classList.add('active');
   ({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[tab]?.();
 }
-function switchSupTab(t){
-  supTab=t;
-  document.querySelectorAll('.stab').forEach(x=>x.classList.remove('active'));
-  document.getElementById('stab-'+t).classList.add('active');
-  document.getElementById('sup-equip').style.display=t==='equip'?'':'none';
-  document.getElementById('sup-stat').style.display=t==='stat'?'':'none';
-}
+function switchSupTab(t){supTab=t;document.querySelectorAll('.stab').forEach(x=>x.classList.remove('active'));document.getElementById('stab-'+t).classList.add('active');document.getElementById('sup-equip').style.display=t==='equip'?'':'none';document.getElementById('sup-stat').style.display=t==='stat'?'':'none';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function today(){return new Date().toISOString().slice(0,10);}
-function toast(msg,type='ok'){
-  const el=document.createElement('div');el.className='ti ti-'+type;el.textContent=msg;
-  document.getElementById('toast').appendChild(el);setTimeout(()=>el.remove(),2800);
-}
+function toast(msg,type='ok'){const el=document.createElement('div');el.className='ti ti-'+type;el.textContent=msg;document.getElementById('toast').appendChild(el);setTimeout(()=>el.remove(),2800);}
 function openM(html){document.getElementById('mbox').innerHTML=html;document.getElementById('ov').classList.add('open');}
 function closeM(){document.getElementById('ov').classList.remove('open');}
 document.getElementById('ov').addEventListener('click',e=>{if(e.target===document.getElementById('ov'))closeM();});
 document.getElementById('mbox').addEventListener('click',e=>e.stopPropagation());
 
-/* ── GIFTS ── */
-function gSt(g){if(g.qty<=0)return'out';if(g.minQty>0&&g.qty<=g.minQty)return'low';return'ok';}
+/* ═══ GIFTS ═══ */
+function gSt(g){if(g.qty===null||g.qty===undefined||g.qty<=0)return'out';if(g.minQty>0&&g.qty<=g.minQty)return'low';return'ok';}
 function renderGifts(){
   const q=(document.getElementById('gSearch').value||'').toLowerCase();
   const fs=document.getElementById('gFilter').value;
   let list=state.gifts;
   if(q)list=list.filter(g=>g.name.toLowerCase().includes(q)||(g.category||'').toLowerCase().includes(q));
   if(fs)list=list.filter(g=>gSt(g)===fs);
-  if(!list.length){
-    document.getElementById('giftGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🎁</div><div>${state.gifts.length?'無符合條件的品項':'尚無品項，點上方「＋ 新增品項」開始'}</div></div>`;
-    return;
-  }
+  if(!list.length){document.getElementById('giftGrid').innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico">🎁</div><div>${state.gifts.length?'無符合條件的品項':'尚無品項'}</div></div>`;return;}
   document.getElementById('giftGrid').innerHTML=list.map(g=>{
     const st=gSt(g),bc=st==='ok'?'b-ok':st==='low'?'b-low':'b-out',bt=st==='ok'?'充足':st==='low'?'偏低':'用完';
     const qc=st==='out'?'#94a3b8':st==='low'?'#ef4444':'#1e293b';
     const thumb=g.image?`<div class="gift-thumb"><img src="${g.image}"></div>`:`<div class="gift-thumb">🎁</div>`;
     return `<div class="gift-card" onclick="openGiftDetail('${g.id}')">${thumb}
       <div class="gift-name">${esc(g.name)}</div>
-      <div class="gift-row"><span style="font-size:20px;font-weight:700;color:${qc}">${g.qty}</span><span class="badge ${bc}">${bt}</span></div>
+      ${g.note?`<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">${esc(g.note)}</div>`:''}
+      <div class="gift-row"><span style="font-size:20px;font-weight:700;color:${qc}">${g.qty??'?'}</span><span class="badge ${bc}">${bt}</span></div>
       ${g.location?`<div style="font-size:11px;color:#94a3b8;margin-top:5px">📍 ${esc(g.location)}</div>`:''}
     </div>`;
   }).join('');
@@ -319,15 +501,16 @@ function openGiftModal(id){
   const g=id?state.gifts.find(x=>x.id===id):null;
   openM(`<div class="m-hdr"><div class="m-title">${g?'編輯品項':'新增禮品品項'}</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
-    <div class="fg"><label class="fl">品項名稱 *</label><input class="inp" id="fGN" value="${g?esc(g.name):''}" placeholder="品項名稱"></div>
+    <div class="fg"><label class="fl">品項名稱 *</label><input class="inp" id="fGN" value="${g?esc(g.name):''}"></div>
     <div class="frow">
-      <div class="fg"><label class="fl">數量</label><input class="inp" id="fGQ" type="number" min="0" value="${g?g.qty:0}"></div>
-      <div class="fg"><label class="fl">低庫存警示值</label><input class="inp" id="fGM" type="number" min="0" value="${g?g.minQty||0:3}"></div>
+      <div class="fg"><label class="fl">數量</label><input class="inp" id="fGQ" type="number" min="0" value="${g?g.qty??'':0}"></div>
+      <div class="fg"><label class="fl">低庫存警示值</label><input class="inp" id="fGM" type="number" min="0" value="${g?g.minQty||0:5}"></div>
     </div>
     <div class="frow">
       <div class="fg"><label class="fl">位置</label><input class="inp" id="fGL" value="${g?esc(g.location||''):''}"></div>
       <div class="fg"><label class="fl">類別</label><input class="inp" id="fGC" value="${g?esc(g.category||''):''}"></div>
     </div>
+    <div class="fg"><label class="fl">備註</label><input class="inp" id="fGNote" value="${g?esc(g.note||''):''}"></div>
     <div class="fg"><label class="fl">圖片（選填）</label>
       <input type="file" accept="image/*" onchange="prevGImg(event)" style="font-size:12px;color:#64748b">
       <div id="gImgPrev">${g&&g.image?`<img src="${g.image}" style="width:72px;height:54px;object-fit:cover;border-radius:7px;margin-top:7px">`:''}</div>
@@ -339,28 +522,15 @@ function openGiftModal(id){
     </div>
   </div>`);
 }
-function prevGImg(e){
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();r.onload=ev=>{
-    document.getElementById('fGI').value=ev.target.result;
-    document.getElementById('gImgPrev').innerHTML=`<img src="${ev.target.result}" style="width:72px;height:54px;object-fit:cover;border-radius:7px;margin-top:7px">`;
-  };r.readAsDataURL(f);
-}
+function prevGImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{document.getElementById('fGI').value=ev.target.result;document.getElementById('gImgPrev').innerHTML=`<img src="${ev.target.result}" style="width:72px;height:54px;object-fit:cover;border-radius:7px;margin-top:7px">`;};r.readAsDataURL(f);}
 function saveGift(id){
-  const name=document.getElementById('fGN').value.trim();
-  if(!name){toast('請輸入品項名稱','err');return;}
-  const data={name,qty:parseInt(document.getElementById('fGQ').value)||0,minQty:parseInt(document.getElementById('fGM').value)||0,
-    location:document.getElementById('fGL').value.trim(),category:document.getElementById('fGC').value.trim(),
-    image:document.getElementById('fGI').value};
+  const name=document.getElementById('fGN').value.trim();if(!name){toast('請輸入品項名稱','err');return;}
+  const data={name,qty:parseInt(document.getElementById('fGQ').value)||0,minQty:parseInt(document.getElementById('fGM').value)||0,location:document.getElementById('fGL').value.trim(),category:document.getElementById('fGC').value.trim(),note:document.getElementById('fGNote').value.trim(),image:document.getElementById('fGI').value};
   if(id){Object.assign(state.gifts.find(x=>x.id===id)||{},data);}
   else{state.gifts.push({id:'g'+uid('g'),...data,records:[]});}
   save();closeM();renderGifts();toast(id?'已更新':'已新增');
 }
-function deleteGift(id){
-  if(!confirm('確定刪除此品項？'))return;
-  state.gifts=state.gifts.filter(g=>g.id!==id);
-  save();closeM();renderGifts();toast('已刪除');
-}
+function deleteGift(id){if(!confirm('確定刪除？'))return;state.gifts=state.gifts.filter(g=>g.id!==id);save();closeM();renderGifts();toast('已刪除');}
 function openGiftDetail(id){
   const g=state.gifts.find(x=>x.id===id);if(!g)return;
   const st=gSt(g);const recs=(g.records||[]).slice().reverse();
@@ -368,25 +538,37 @@ function openGiftDetail(id){
   <div class="m-body">
     <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap">
       <div><div style="font-size:11px;color:#64748b;text-transform:uppercase">庫存</div>
-        <div style="font-size:28px;font-weight:800;color:${st==='ok'?'#6366f1':'#ef4444'}">${g.qty}</div></div>
+        <div style="font-size:28px;font-weight:800;color:${st==='ok'?'#6366f1':'#ef4444'}">${g.qty??'?'}</div></div>
       <div><div style="font-size:11px;color:#64748b">位置</div><div style="font-size:13px;margin-top:3px">${esc(g.location||'—')}</div></div>
       <div><div style="font-size:11px;color:#64748b">類別</div><div style="font-size:13px;margin-top:3px">${esc(g.category||'—')}</div></div>
+      ${g.note?`<div style="width:100%"><div style="font-size:11px;color:#64748b">備註</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${esc(g.note)}</div></div>`:''}
     </div>
     <div style="display:flex;gap:8px;margin-bottom:16px">
       <button class="btn btn-g btn-sm" onclick="openGiftModal('${id}')">✏️ 編輯</button>
       <button class="btn btn-p btn-sm" onclick="openDispatchModal('${id}')">📤 出庫</button>
     </div>
-    <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">出庫記錄</div>
-    ${recs.length?`<div style="max-height:200px;overflow-y:auto"><table style="width:100%;font-size:12px;border-collapse:collapse">
-      <thead><tr>${['日期','數量','用途','領取人'].map(h=>`<th style="padding:5px 8px;text-align:left;color:#94a3b8;border-bottom:1px solid #f1f5f9;font-size:10px;text-transform:uppercase">${h}</th>`).join('')}</tr></thead>
-      <tbody>${recs.map(r=>`<tr>
+    <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;margin-bottom:8px">出庫記錄 (${recs.length})</div>
+    ${recs.length?`<div style="max-height:220px;overflow-y:auto"><table style="width:100%;font-size:12px;border-collapse:collapse">
+      <thead><tr>${['日期','數量','用途','領取人',''].map(h=>`<th style="padding:5px 8px;text-align:left;color:#94a3b8;border-bottom:1px solid #f1f5f9;font-size:10px;text-transform:uppercase">${h}</th>`).join('')}</tr></thead>
+      <tbody>${recs.map((r,i)=>`<tr>
         <td style="padding:5px 8px;border-bottom:1px solid #f8fafc">${r.date}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #f8fafc;color:#ef4444;font-weight:600">-${r.qty}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #f8fafc">${esc(r.purpose||'')}</td>
         <td style="padding:5px 8px;border-bottom:1px solid #f8fafc">${esc(r.by||'')}</td>
+        <td style="padding:5px 8px;border-bottom:1px solid #f8fafc"><button class="btn btn-d btn-xs" onclick="deleteGiftRecord('${id}',${recs.length-1-i})">🗑</button></td>
       </tr>`).join('')}</tbody></table></div>`
     :`<div style="color:#94a3b8;font-size:12px;padding:10px 0">尚無出庫記錄</div>`}
   </div>`);
+}
+function deleteGiftRecord(gId,revIdx){
+  if(!confirm('確定刪除此出庫記錄？庫存將回復。'))return;
+  const g=state.gifts.find(x=>x.id===gId);if(!g)return;
+  const recs=(g.records||[]).slice().reverse();
+  const r=recs[revIdx];if(!r)return;
+  g.qty=(g.qty||0)+r.qty;
+  const origIdx=(g.records||[]).findIndex(x=>x.date===r.date&&x.qty===r.qty&&x.by===r.by&&x.purpose===r.purpose);
+  if(origIdx>-1)g.records.splice(origIdx,1);
+  save();openGiftDetail(gId);renderGifts();toast('已刪除，庫存已回復');
 }
 function openDispatchModal(id){
   const g=state.gifts.find(x=>x.id===id);if(!g)return;
@@ -394,7 +576,7 @@ function openDispatchModal(id){
   <div class="m-body">
     <div class="frow">
       <div class="fg"><label class="fl">日期</label><input class="inp" type="date" id="fDD" value="${today()}"></div>
-      <div class="fg"><label class="fl">數量（庫存 ${g.qty}）</label><input class="inp" type="number" min="1" max="${g.qty}" id="fDQ" value="1"></div>
+      <div class="fg"><label class="fl">數量（庫存 ${g.qty??'?'}）</label><input class="inp" type="number" min="1" id="fDQ" value="1"></div>
     </div>
     <div class="fg"><label class="fl">用途</label><input class="inp" id="fDP" placeholder="e.g. 員工生日"></div>
     <div class="fg"><label class="fl">領取人</label><input class="inp" id="fDB" placeholder="姓名"></div>
@@ -408,118 +590,249 @@ function dispatchGift(id){
   const g=state.gifts.find(x=>x.id===id);if(!g)return;
   const qty=parseInt(document.getElementById('fDQ').value)||0;
   if(qty<=0){toast('請輸入出庫數量','err');return;}
-  if(qty>g.qty){toast('庫存不足','err');return;}
-  g.qty-=qty;if(!g.records)g.records=[];
-  g.records.push({date:document.getElementById('fDD').value,qty,
-    purpose:document.getElementById('fDP').value.trim(),by:document.getElementById('fDB').value.trim()});
+  g.qty=(g.qty||0)-qty;if(g.qty<0)g.qty=0;
+  if(!g.records)g.records=[];
+  g.records.push({date:document.getElementById('fDD').value,qty,purpose:document.getElementById('fDP').value.trim(),by:document.getElementById('fDB').value.trim()});
   save();closeM();renderGifts();toast(`出庫 ${qty} 件`);
 }
 
-/* ── MACHINES ── */
+/* ═══ MACHINES ═══ */
+function getMachineInfo(n){
+  const t=today();
+  const active=(state.machines.records||[]).filter(r=>!r.returned&&r.date<=t&&(r.machineNums||[]).includes(n));
+  const future=(state.machines.records||[]).filter(r=>!r.returned&&r.date>t&&(r.machineNums||[]).includes(n));
+  if(active.length>0)return{status:'bw',label:'外借中',borrower:active[active.length-1].borrower,returnDate:active[active.length-1].returnDate};
+  if(future.length>0)return{status:'res',label:'已預約',borrower:future[0].borrower,returnDate:future[0].returnDate};
+  return{status:'av',label:'可借用',borrower:'',returnDate:''};
+}
 function renderMachines(){
-  const recs=state.machines.records||[];
-  const borrowed=recs.filter(r=>!r.returned).reduce((s,r)=>s+(r.count||1),0);
+  const total=state.machines.total||4;
   let mh='';
-  for(let i=1;i<=state.machines.total;i++){
-    const bw=i<=borrowed;
-    mh+=`<div class="mc ${bw?'bw':'av'}"><div style="font-size:28px;margin-bottom:4px">💳</div>
-      <div style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:3px">機台 ${i}</div>
-      <div style="font-size:12px;font-weight:700;color:${bw?'#ef4444':'#10b981'}">${bw?'借出中':'可借用'}</div></div>`;
+  for(let i=1;i<=total;i++){
+    const info=getMachineInfo(i);
+    const icon=info.status==='av'?'✅':info.status==='res'?'🟡':'🔴';
+    mh+=`<div class="mc ${info.status}">
+      <div style="font-size:26px;font-weight:800;color:${info.status==='av'?'#10b981':info.status==='res'?'#f59e0b':'#ef4444'}">#${i}</div>
+      <div style="font-size:12px;font-weight:700;margin:4px 0;color:${info.status==='av'?'#10b981':info.status==='res'?'#f59e0b':'#ef4444'}">${icon} ${info.label}</div>
+      ${info.borrower?`<div style="font-size:11px;color:#64748b">借用人：${esc(info.borrower)}</div>`:'<div style="font-size:11px;color:#94a3b8">—</div>'}
+      ${info.returnDate?`<div style="font-size:11px;color:#94a3b8">歸還：${info.returnDate.replace(/-/g,'/')}</div>`:''}</div>`;
   }
+  const t=today();
+  const unassigned=(state.machines.records||[]).filter(r=>!r.returned&&r.date<=t&&(!r.machineNums||r.machineNums.length===0));
+  if(unassigned.length){mh+=`<div class="mc" style="border-color:rgba(245,158,11,.3);grid-column:1/-1;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 16px"><div style="font-size:18px">⚠️</div><div style="font-size:12px;color:#92400e">${unassigned.length} 筆借用記錄未指定機台：${unassigned.map(r=>r.borrower).join('、')}</div></div>`;}
   document.getElementById('machineCards').innerHTML=mh;
-  document.getElementById('machineBody').innerHTML=recs.length
-    ?recs.slice().reverse().map(r=>`<tr>
-        <td>${r.date}</td><td>${esc(r.borrower)}</td><td>${esc(r.dept||'—')}</td>
-        <td>${r.count}</td><td>${r.returnDate||'—'}</td>
-        <td><span class="badge ${r.returned?'b-ok':'b-low'}">${r.returned?'已歸還':'借出中'}</span></td>
-        <td>${r.returned?'':`<button class="btn btn-s btn-sm" onclick="returnMachine('${r.id}')">歸還</button>`}</td>
-      </tr>`).join('')
-    :`<tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8">尚無借用記錄</td></tr>`;
+  renderMachineTable();
 }
-function openBorrowModal(){
-  const borrowed=(state.machines.records||[]).filter(r=>!r.returned).reduce((s,r)=>s+(r.count||1),0);
-  const avail=state.machines.total-borrowed;
-  if(avail<=0){toast('所有刷卡機均已借出','err');return;}
-  openM(`<div class="m-hdr"><div class="m-title">💳 新增借用記錄</div><button class="m-close" onclick="closeM()">✕</button></div>
+function toggleMSort(){mSortAsc=!mSortAsc;const b=document.getElementById('mSortBtn');if(b)b.textContent=mSortAsc?'📅 舊→新':'📅 新→舊';const a=document.getElementById('mSortArrow');if(a)a.textContent=mSortAsc?'↑':'↓';renderMachineTable();}
+function renderMachineTable(){
+  const fv=document.getElementById('mFilter')?.value||'';
+  const sv=(document.getElementById('mSearch')?.value||'').trim().toLowerCase();
+  const t=today();
+  let recs=[...(state.machines.records||[])];
+  if(fv==='active')recs=recs.filter(r=>!r.returned&&r.date<=t);
+  else if(fv==='returned')recs=recs.filter(r=>r.returned===true);
+  else if(fv==='future')recs=recs.filter(r=>r.date>t);
+  if(sv)recs=recs.filter(r=>(r.borrower||'').toLowerCase().includes(sv));
+  recs.sort((a,b)=>{const c=(a.date||'').localeCompare(b.date||'');return mSortAsc?c:-c;});
+  if(!recs.length){document.getElementById('machineBody').innerHTML='<tr><td colspan="11" style="text-align:center;padding:32px;color:#94a3b8">無符合條件的紀錄</td></tr>';return;}
+  document.getElementById('machineBody').innerHTML=recs.map(r=>{
+    const isRet=r.returned===true;
+    const isFut=r.date&&r.date>t;
+    const isOver=!isRet&&!isFut&&r.returnDate&&r.returnDate<t;
+    const trCls=isRet?'tr-returned':isFut?'tr-future':isOver?'tr-overdue':'';
+    const nums=(r.machineNums&&r.machineNums.length)?r.machineNums.map(n=>'#'+n).join('、'):'待分配';
+    let badge,action;
+    if(isRet){badge=`<span class="badge b-ok">✅ 已歸還</span>`;action=`<button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">🗑</button>`;}
+    else if(isFut){badge=`<span class="badge b-info">📅 預約中</span>`;action=`<button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏ 編輯</button> <button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">✕ 取消</button>`;}
+    else if(isOver){badge=`<span class="badge b-low">⚠️ 逾期</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
+    else{badge=`<span class="badge b-warn">借出中</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
+    return `<tr class="${trCls}">
+      <td>${badge}</td>
+      <td>${(r.date||'').replace(/-/g,'/')}</td>
+      <td>${r.time||'—'}</td>
+      <td><strong>${esc(r.borrower)}</strong>${r.dept?`<br><span style="font-size:11px;color:#94a3b8">${esc(r.dept)}</span>`:''}</td>
+      <td>${r.count}</td>
+      <td>${nums}</td>
+      <td>${esc(r.useLocation||'—')}</td>
+      <td>${esc(r.pickupLocation||'—')}</td>
+      <td>${r.returnDate?(r.returnDate.replace(/-/g,'/')):'—'}</td>
+      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.notes||'')}">${esc(r.notes||'—')}</td>
+      <td style="white-space:nowrap">${action}</td>
+    </tr>`;
+  }).join('');
+}
+function buildMachineChecks(selNums){
+  const t=today();let html='';
+  for(let n=1;n<=(state.machines.total||4);n++){
+    const info=getMachineInfo(n);
+    const mine=selNums.includes(n);
+    const unavail=(info.status==='bw'||info.status==='res')&&!mine;
+    const cls='mchk'+(selNums.includes(n)?' mchk-on':'')+(unavail?' mchk-unavail':'');
+    const dotCls=unavail?'bw':(selNums.includes(n)?'av':'av');
+    const lbl=unavail?`#${n} (${esc(info.borrower)})`:`#${n}`;
+    html+=`<div class="${cls}" id="mck${n}"${unavail?'':` onclick="toggleMck(${n})"`}><div class="mchk-dot ${info.status}"></div><span>${lbl}</span></div>`;
+  }
+  return html;
+}
+function toggleMck(n){const el=document.getElementById('mck'+n);if(!el||el.classList.contains('mchk-unavail'))return;el.classList.toggle('mchk-on');}
+function getSelMcks(){const sel=[];for(let n=1;n<=(state.machines.total||4);n++){const el=document.getElementById('mck'+n);if(el&&el.classList.contains('mchk-on'))sel.push(n);}return sel;}
+function openBorrowModal(editId){
+  const r=editId?((state.machines.records||[]).find(x=>x.id===editId)):null;
+  const sel=r?(r.machineNums||[]):[];
+  openM(`<div class="m-hdr"><div class="m-title">${r?'✏️ 編輯借用記錄':'💳 新增借用記錄'}</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
-    <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fBP" placeholder="姓名"></div>
     <div class="frow">
-      <div class="fg"><label class="fl">部門</label><input class="inp" id="fBD" placeholder="部門"></div>
-      <div class="fg"><label class="fl">台數（可借 ${avail}）</label><input class="inp" type="number" min="1" max="${avail}" id="fBC" value="1"></div>
+      <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fBP" value="${r?esc(r.borrower):''}"></div>
+      <div class="fg"><label class="fl">部門</label><input class="inp" id="fBDep" value="${r?esc(r.dept||''):''}"></div>
     </div>
     <div class="frow">
-      <div class="fg"><label class="fl">借用日期</label><input class="inp" type="date" id="fBDate" value="${today()}"></div>
-      <div class="fg"><label class="fl">預計歸還日</label><input class="inp" type="date" id="fBR"></div>
+      <div class="fg"><label class="fl">借用日期</label><input class="inp" type="date" id="fBDate" value="${r?r.date:today()}"></div>
+      <div class="fg"><label class="fl">時間</label><input class="inp" id="fBTime" placeholder="e.g. 09:30" value="${r?esc(r.time||''):''}"></div>
     </div>
+    <div class="fg"><label class="fl">指定機台（可多選）</label>
+      <div class="mchk-group">${buildMachineChecks(sel)}</div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">台數</label><input class="inp" type="number" min="1" max="${state.machines.total}" id="fBC" value="${r?r.count:1}"></div>
+      <div class="fg"><label class="fl">預計歸還日</label><input class="inp" type="date" id="fBR" value="${r?r.returnDate||'':''}"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">使用地點</label><input class="inp" id="fBUL" value="${r?esc(r.useLocation||''):''}"></div>
+      <div class="fg"><label class="fl">取機地點</label><input class="inp" id="fBPL" value="${r?esc(r.pickupLocation||''):''}"></div>
+    </div>
+    <div class="fg"><label class="fl">備註</label><input class="inp" id="fBNotes" value="${r?esc(r.notes||''):''}"></div>
     <div class="fa">
+      ${r?`<button class="btn btn-d btn-sm" onclick="deleteMR('${r.id}');closeM()">刪除</button>`:''}
       <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addBorrow()">確認借用</button>
+      <button class="btn btn-p btn-sm" onclick="${r?`saveMachineEdit('${r.id}')`:'addBorrow()'}">儲存</button>
     </div>
   </div>`);
 }
-function addBorrow(){
-  const borrower=document.getElementById('fBP').value.trim();
-  if(!borrower){toast('請輸入借用人','err');return;}
-  if(!state.machines.records)state.machines.records=[];
-  state.machines.records.push({id:'m'+uid('mr'),date:document.getElementById('fBDate').value,
-    borrower,dept:document.getElementById('fBD').value.trim(),
-    count:parseInt(document.getElementById('fBC').value)||1,
-    returnDate:document.getElementById('fBR').value,returned:false});
-  save();closeM();renderMachines();toast('借用記錄已新增');
-}
-function returnMachine(id){
-  const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;
-  r.returned=true;r.returnedDate=today();save();renderMachines();toast('已標記歸還');
-}
+function _mfd(){return{borrower:document.getElementById('fBP').value.trim(),dept:document.getElementById('fBDep').value.trim(),date:document.getElementById('fBDate').value,time:document.getElementById('fBTime').value.trim(),machineNums:getSelMcks(),count:parseInt(document.getElementById('fBC').value)||1,returnDate:document.getElementById('fBR').value,useLocation:document.getElementById('fBUL').value.trim(),pickupLocation:document.getElementById('fBPL').value.trim(),notes:document.getElementById('fBNotes').value.trim()};}
+function addBorrow(){const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}if(!state.machines.records)state.machines.records=[];state.machines.records.push({id:'mr'+uid('mr'),...d,returned:false});save();closeM();renderMachines();toast('借用記錄已新增');}
+function saveMachineEdit(id){const rec=(state.machines.records||[]).find(x=>x.id===id);if(!rec)return;const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}Object.assign(rec,d);save();closeM();renderMachines();toast('記錄已更新');}
+function deleteMR(id){if(!confirm('確定刪除此記錄？'))return;state.machines.records=(state.machines.records||[]).filter(r=>r.id!==id);save();renderMachines();toast('已刪除');}
+function returnMachine(id){const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;r.returned=true;r.returnedDate=today();save();renderMachines();toast('已標記歸還');}
 
-/* ── MEAL CARD ── */
+/* ═══ MEAL CARD ═══ */
+function getMealRunningBal(){
+  const recs=[...(state.mealCard.records||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.id-b.id));
+  let bal=(state.mealCard.initialBalance||0);const map={};
+  for(const r of recs){bal+=(r.topup||0);bal-=(r.swipe||0);map[r.id]=bal;}
+  return map;
+}
 function renderMealCard(){
-  const mc=state.mealCard||{};
-  document.getElementById('mealInfo').innerHTML=`
-    <div><div class="mci-lbl">卡號</div><div class="mci-val">${esc(mc.cardNo||'—')}</div></div>
-    <div><div class="mci-lbl">所屬部門</div><div class="mci-val">${esc(mc.dept||'—')}</div></div>
-    <div><div class="mci-lbl">記錄筆數</div><div class="mci-val">${(mc.records||[]).length} 筆</div></div>`;
-  document.getElementById('mealBody').innerHTML=(mc.records||[]).length
-    ?(mc.records||[]).slice().reverse().map(r=>`<tr>
-        <td>${r.month}</td><td>$${Number(r.amount).toLocaleString()}</td>
-        <td>${esc(r.note||'')}</td>
-        <td><button class="btn btn-d btn-sm" onclick="deleteMeal('${r.id}')">刪除</button></td>
-      </tr>`).join('')
-    :`<tr><td colspan="4" style="text-align:center;padding:32px;color:#94a3b8">尚無記錄</td></tr>`;
+  const recs=state.mealCard.records||[];
+  const totalTopup=recs.reduce((s,r)=>s+(r.topup||0),0);
+  const totalSwipe=recs.reduce((s,r)=>s+(r.swipe||0),0);
+  const bal=(state.mealCard.initialBalance||0)+totalTopup-totalSwipe;
+  const balCls=bal<300?'sc-red':bal<800?'sc-orange':'sc-green';
+  document.getElementById('mcCardNo').textContent=state.mealCard.cardNo||'AAX110676';
+  document.getElementById('mcDept').textContent=state.mealCard.dept||'人才發展課';
+  document.getElementById('mealStats').innerHTML=`
+    <div class="g stat-c ${balCls}"><div class="stat-num">$${bal.toLocaleString()}</div><div class="stat-lbl">目前餘額</div></div>
+    <div class="g stat-c sc-blue"><div class="stat-num">$${totalTopup.toLocaleString()}</div><div class="stat-lbl">累計儲值</div></div>
+    <div class="g stat-c sc-orange"><div class="stat-num">$${totalSwipe.toLocaleString()}</div><div class="stat-lbl">累計消費</div></div>
+    <div class="g stat-c sc-blue"><div class="stat-num">${recs.length}</div><div class="stat-lbl">紀錄筆數</div></div>`;
+  renderMealTable();
 }
-function openMealModal(){
-  const d=new Date();const ym=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  openM(`<div class="m-hdr"><div class="m-title">🍽 新增月費記錄</div><button class="m-close" onclick="closeM()">✕</button></div>
+function toggleMlSort(){mlSortAsc=!mlSortAsc;const b=document.getElementById('mlSortBtn');if(b)b.textContent=mlSortAsc?'📅 舊→新':'📅 新→舊';const a=document.getElementById('mlSortArrow');if(a)a.textContent=mlSortAsc?'↑':'↓';renderMealTable();}
+function renderMealTable(){
+  const fv=document.getElementById('mlFilter')?.value||'';
+  const sv=(document.getElementById('mlSearch')?.value||'').trim().toLowerCase();
+  const balMap=getMealRunningBal();
+  let recs=[...(state.mealCard.records||[])];
+  if(fv==='topup')recs=recs.filter(r=>(r.topup||0)>0);
+  if(fv==='swipe')recs=recs.filter(r=>(r.swipe||0)>0);
+  if(sv)recs=recs.filter(r=>(r.visitor||'').toLowerCase().includes(sv)||(r.item||'').toLowerCase().includes(sv));
+  recs.sort((a,b)=>{const c=(a.date||'').localeCompare(b.date||'')||((a.id||0)-(b.id||0));return mlSortAsc?c:-c;});
+  if(!recs.length){document.getElementById('mealBody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:32px;color:#94a3b8">無符合條件的紀錄</td></tr>';return;}
+  document.getElementById('mealBody').innerHTML=recs.map(r=>{
+    const isTopup=(r.topup||0)>0;
+    const balDisp=balMap[r.id]!==undefined?'$'+balMap[r.id].toLocaleString():'—';
+    return `<tr class="${isTopup?'tr-topup':''}">
+      <td>${(r.date||'').replace(/-/g,'/')}</td>
+      <td>${esc(r.visitor||'—')}</td>
+      <td>${esc(r.item||'—')}</td>
+      <td>${isTopup?`<span class="amt-in">+$${r.topup}</span>`:'—'}</td>
+      <td>${esc(r.topupBy||'—')}</td>
+      <td>${(r.swipe||0)>0?`<span class="amt-out">$${r.swipe}</span>`:'—'}</td>
+      <td>${esc(r.swipeBy||'—')}</td>
+      <td><strong>${balDisp}</strong></td>
+      <td>${esc(r.note||'—')}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-g btn-xs" onclick="openMealModal(null,${r.id})">✏</button>
+        <button class="btn btn-d btn-xs" onclick="deleteMealRec(${r.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function openMealModal(type,id){
+  const r=id?(state.mealCard.records||[]).find(x=>x.id===id):null;
+  const mType=type||(r?((r.topup||0)>0?'topup':'swipe'):'swipe');
+  const isTopup=mType==='topup';
+  openM(`<div class="m-hdr"><div class="m-title">${r?'編輯紀錄':isTopup?'＋ 儲值':'＋ 新增消費紀錄'}</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
-    <div class="frow">
-      <div class="fg"><label class="fl">月份</label><input class="inp" type="month" id="fMM" value="${ym}"></div>
-      <div class="fg"><label class="fl">金額（元）</label><input class="inp" type="number" min="0" id="fMA" placeholder="0"></div>
-    </div>
-    <div class="fg"><label class="fl">備註</label><input class="inp" id="fMN" placeholder="選填"></div>
+    <div class="fg"><label class="fl">日期</label><input class="inp" type="date" id="mlDate" value="${r?r.date:today()}"></div>
+    ${!isTopup?`<div class="fg"><label class="fl">訪客姓名</label><input class="inp" id="mlVisitor" value="${r?esc(r.visitor||''):''}"></div>
+    <div class="fg"><label class="fl">購買品名</label><input class="inp" id="mlItem" value="${r?esc(r.item||''):''}"></div>`:''}
+    ${isTopup?`<div class="frow">
+      <div class="fg"><label class="fl">儲值金額 *</label><input class="inp" type="number" min="1" id="mlTopupAmt" value="${r?r.topup||'':''}"></div>
+      <div class="fg"><label class="fl">儲值人 *</label><input class="inp" id="mlTopupBy" value="${r?esc(r.topupBy||''):''}"></div>
+    </div>`:`<div class="frow">
+      <div class="fg"><label class="fl">刷卡金額 *</label><input class="inp" type="number" min="1" id="mlSwipeAmt" value="${r?r.swipe||'':''}"></div>
+      <div class="fg"><label class="fl">刷卡人 *</label><input class="inp" id="mlSwipeBy" value="${r?esc(r.swipeBy||''):''}"></div>
+    </div>`}
+    <div class="fg"><label class="fl">備註</label><input class="inp" id="mlNote" value="${r?esc(r.note||''):''}"></div>
+    <div style="display:none" id="mlType">${mType}</div>
+    <div style="display:none" id="mlEditId">${id||''}</div>
     <div class="fa">
       <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addMeal()">新增</button>
+      <button class="btn btn-p btn-sm" onclick="submitMeal()">儲存</button>
     </div>
   </div>`);
 }
-function addMeal(){
-  const month=document.getElementById('fMM').value;if(!month){toast('請選擇月份','err');return;}
+function submitMeal(){
+  const isTopup=document.getElementById('mlType').textContent==='topup';
+  const editId=parseInt(document.getElementById('mlEditId').textContent)||null;
+  const date=document.getElementById('mlDate').value;if(!date){toast('請選擇日期','err');return;}
+  let topup=0,topupBy='',swipe=0,swipeBy='',visitor='',item='';
+  if(isTopup){
+    topup=parseInt(document.getElementById('mlTopupAmt')?.value)||0;
+    topupBy=document.getElementById('mlTopupBy')?.value.trim()||'';
+    if(topup<1){toast('請填儲值金額','err');return;}if(!topupBy){toast('請填儲值人','err');return;}
+  }else{
+    swipe=parseInt(document.getElementById('mlSwipeAmt')?.value)||0;
+    swipeBy=document.getElementById('mlSwipeBy')?.value.trim()||'';
+    visitor=document.getElementById('mlVisitor')?.value.trim()||'';
+    item=document.getElementById('mlItem')?.value.trim()||'';
+    if(swipe<1){toast('請填刷卡金額','err');return;}if(!swipeBy){toast('請填刷卡人','err');return;}
+  }
+  const note=document.getElementById('mlNote').value.trim();
   if(!state.mealCard.records)state.mealCard.records=[];
-  state.mealCard.records.push({id:'ml'+uid('ml'),month,
-    amount:parseFloat(document.getElementById('fMA').value)||0,
-    note:document.getElementById('fMN').value.trim()});
-  save();closeM();renderMealCard();toast('已新增');
+  if(!state.mealCard.nextId)state.mealCard.nextId=100;
+  const rec={id:editId||state.mealCard.nextId++,date,visitor,item,topup,topupBy,swipe,swipeBy,note};
+  if(editId){const idx=(state.mealCard.records||[]).findIndex(x=>x.id===editId);if(idx>-1)state.mealCard.records[idx]=rec;}
+  else state.mealCard.records.push(rec);
+  save();closeM();renderMealCard();toast(editId?'已更新':isTopup?`儲值 $${topup}`:`新增消費 $${swipe}`);
 }
-function deleteMeal(id){
-  state.mealCard.records=(state.mealCard.records||[]).filter(r=>r.id!==id);
-  save();renderMealCard();toast('已刪除');
+function deleteMealRec(id){if(!confirm('確定刪除此筆記錄？'))return;state.mealCard.records=(state.mealCard.records||[]).filter(r=>r.id!==id);save();renderMealCard();toast('已刪除');}
+function openMealSettings(){
+  openM(`<div class="m-hdr"><div class="m-title">⚙ 餐卡設定</div><button class="m-close" onclick="closeM()">✕</button></div>
+  <div class="m-body">
+    <div class="fg"><label class="fl">卡號</label><input class="inp" id="msCardNo" value="${esc(state.mealCard.cardNo||'')}"></div>
+    <div class="fg"><label class="fl">掛帳部門</label><input class="inp" id="msDept" value="${esc(state.mealCard.dept||'')}"></div>
+    <div class="fg"><label class="fl">初始餘額（元）</label><input class="inp" type="number" id="msInitBal" value="${state.mealCard.initialBalance||0}"></div>
+    <div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="saveMealSettings()">儲存</button></div>
+  </div>`);
 }
+function saveMealSettings(){state.mealCard.cardNo=document.getElementById('msCardNo').value.trim()||'AAX110676';state.mealCard.dept=document.getElementById('msDept').value.trim();state.mealCard.initialBalance=parseInt(document.getElementById('msInitBal').value)||0;save();closeM();renderMealCard();toast('設定已儲存');}
 
-/* ── SUPPLIES ── */
+/* ═══ SUPPLIES ═══ */
 function renderSupplies(){renderEquip();renderStat();}
 function renderEquip(){
   const eq=(state.supplies&&state.supplies.equipment)||[];
-  if(!eq.length){document.getElementById('sup-equip').innerHTML=`<div class="empty"><div class="empty-ico">📷</div><div>尚無器材</div></div>`;return;}
+  if(!eq.length){document.getElementById('sup-equip').innerHTML=`<div class="empty-state"><div class="empty-ico">📷</div><div>尚無器材</div></div>`;return;}
   document.getElementById('sup-equip').innerHTML=eq.map(e=>{
     const borrowed=(e.records||[]).filter(r=>!r.returned).reduce((s,r)=>s+(r.count||1),0);
     const avail=e.total-borrowed;
@@ -546,15 +859,10 @@ function renderEquip(){
     </div>`;
   }).join('');
 }
-function deleteEquip(id){
-  if(!confirm('確定刪除此器材？'))return;
-  state.supplies.equipment=(state.supplies.equipment||[]).filter(x=>x.id!==id);
-  save();renderEquip();toast('已刪除');
-}
+function deleteEquip(id){if(!confirm('確定刪除？'))return;state.supplies.equipment=(state.supplies.equipment||[]).filter(x=>x.id!==id);save();renderEquip();toast('已刪除');}
 function openEqBorrow(eId){
   const e=(state.supplies.equipment||[]).find(x=>x.id===eId);if(!e)return;
-  const borrowed=(e.records||[]).filter(r=>!r.returned).reduce((s,r)=>s+(r.count||1),0);
-  const avail=e.total-borrowed;
+  const borrowed=(e.records||[]).filter(r=>!r.returned).reduce((s,r)=>s+(r.count||1),0);const avail=e.total-borrowed;
   openM(`<div class="m-hdr"><div class="m-title">借用 ${esc(e.name)}</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
     <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fEP" placeholder="姓名"></div>
@@ -562,114 +870,32 @@ function openEqBorrow(eId){
       <div class="fg"><label class="fl">數量（最多 ${avail}）</label><input class="inp" type="number" min="1" max="${avail}" id="fEC" value="1"></div>
       <div class="fg"><label class="fl">借用日期</label><input class="inp" type="date" id="fED" value="${today()}"></div>
     </div>
-    <div class="fa">
-      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addEqBorrow('${eId}')">確認借用</button>
-    </div>
+    <div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="addEqBorrow('${eId}')">確認借用</button></div>
   </div>`);
 }
 function addEqBorrow(eId){
   const e=(state.supplies.equipment||[]).find(x=>x.id===eId);if(!e)return;
-  const borrower=document.getElementById('fEP').value.trim();
-  if(!borrower){toast('請輸入借用人','err');return;}
+  const borrower=document.getElementById('fEP').value.trim();if(!borrower){toast('請輸入借用人','err');return;}
   if(!e.records)e.records=[];
-  e.records.push({id:'er'+uid('er'),date:document.getElementById('fED').value,
-    borrower,count:parseInt(document.getElementById('fEC').value)||1,returned:false});
+  e.records.push({id:'er'+uid('er'),date:document.getElementById('fED').value,borrower,count:parseInt(document.getElementById('fEC').value)||1,returned:false});
   save();closeM();renderEquip();toast('借用記錄已新增');
 }
-function returnEquip(eId,rId){
-  const e=(state.supplies.equipment||[]).find(x=>x.id===eId);if(!e)return;
-  const r=(e.records||[]).find(x=>x.id===rId);if(!r)return;
-  r.returned=true;r.returnedDate=today();save();renderEquip();toast('已標記歸還');
-}
-function openAddEquipModal(){
-  openM(`<div class="m-hdr"><div class="m-title">新增器材</div><button class="m-close" onclick="closeM()">✕</button></div>
-  <div class="m-body">
-    <div class="fg"><label class="fl">器材名稱 *</label><input class="inp" id="fAEN" placeholder="名稱"></div>
-    <div class="frow">
-      <div class="fg"><label class="fl">總數量</label><input class="inp" type="number" min="1" id="fAET" value="1"></div>
-      <div class="fg"><label class="fl">存放位置</label><input class="inp" id="fAEL" placeholder="位置"></div>
-    </div>
-    <div class="fa">
-      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addEquip()">新增</button>
-    </div>
-  </div>`);
-}
-function addEquip(){
-  const name=document.getElementById('fAEN').value.trim();if(!name){toast('請輸入名稱','err');return;}
-  if(!state.supplies)state.supplies={equipment:[],stationery:[]};
-  if(!state.supplies.equipment)state.supplies.equipment=[];
-  state.supplies.equipment.push({id:'E'+Date.now(),name,
-    total:parseInt(document.getElementById('fAET').value)||1,
-    location:document.getElementById('fAEL').value.trim(),records:[]});
-  save();closeM();renderEquip();toast('器材已新增');
-}
+function returnEquip(eId,rId){const e=(state.supplies.equipment||[]).find(x=>x.id===eId);if(!e)return;const r=(e.records||[]).find(x=>x.id===rId);if(!r)return;r.returned=true;r.returnedDate=today();save();renderEquip();toast('已標記歸還');}
+function openAddEquipModal(){openM(`<div class="m-hdr"><div class="m-title">新增器材</div><button class="m-close" onclick="closeM()">✕</button></div><div class="m-body"><div class="fg"><label class="fl">名稱 *</label><input class="inp" id="fAEN" placeholder="器材名稱"></div><div class="frow"><div class="fg"><label class="fl">總數量</label><input class="inp" type="number" min="1" id="fAET" value="1"></div><div class="fg"><label class="fl">存放位置</label><input class="inp" id="fAEL" placeholder="位置"></div></div><div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="addEquip()">新增</button></div></div>`);}
+function addEquip(){const name=document.getElementById('fAEN').value.trim();if(!name){toast('請輸入名稱','err');return;}if(!state.supplies)state.supplies={equipment:[],stationery:[]};if(!state.supplies.equipment)state.supplies.equipment=[];state.supplies.equipment.push({id:'E'+Date.now(),name,total:parseInt(document.getElementById('fAET').value)||1,location:document.getElementById('fAEL').value.trim(),records:[]});save();closeM();renderEquip();toast('器材已新增');}
 function renderStat(){
   const st=(state.supplies&&state.supplies.stationery)||[];
-  if(!st.length){document.getElementById('sup-stat').innerHTML=`<div class="empty"><div class="empty-ico">✏️</div><div>尚無文具</div></div>`;return;}
-  document.getElementById('sup-stat').innerHTML=`<div class="g tbl-wrap"><table>
-    <thead><tr><th>品項</th><th>庫存</th><th>操作</th></tr></thead>
-    <tbody>${st.map(s=>`<tr>
-      <td>${esc(s.name)}</td>
-      <td><span style="font-size:17px;font-weight:700">${s.qty}</span></td>
-      <td><div style="display:flex;gap:6px;padding:2px 0">
-        <button class="btn btn-g btn-sm" onclick="adjStat('${s.id}',-1)" ${s.qty<=0?'disabled':''}>－</button>
-        <button class="btn btn-g btn-sm" onclick="adjStat('${s.id}',1)">＋</button>
-        <button class="btn btn-g btn-sm" onclick="openAdjStat('${s.id}')">設定</button>
-        <button class="btn btn-d btn-sm" onclick="deleteStat('${s.id}')">刪除</button>
-      </div></td>
-    </tr>`).join('')}</tbody></table></div>`;
+  if(!st.length){document.getElementById('sup-stat').innerHTML=`<div class="empty-state"><div class="empty-ico">✏️</div><div>尚無文具</div></div>`;return;}
+  document.getElementById('sup-stat').innerHTML=`<div class="g tbl-wrap"><table><thead><tr><th>品項</th><th>庫存</th><th>操作</th></tr></thead><tbody>${st.map(s=>`<tr><td>${esc(s.name)}</td><td><span style="font-size:17px;font-weight:700">${s.qty}</span></td><td><div style="display:flex;gap:6px;padding:2px 0"><button class="btn btn-g btn-sm" onclick="adjStat('${s.id}',-1)" ${s.qty<=0?'disabled':''}>－</button><button class="btn btn-g btn-sm" onclick="adjStat('${s.id}',1)">＋</button><button class="btn btn-g btn-sm" onclick="openAdjStat('${s.id}')">設定</button><button class="btn btn-d btn-sm" onclick="deleteStat('${s.id}')">刪除</button></div></td></tr>`).join('')}</tbody></table></div>`;
 }
-function adjStat(id,delta){
-  const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;
-  s.qty=Math.max(0,s.qty+delta);save();renderStat();toast(delta>0?'＋1':'－1');
-}
-function openAdjStat(id){
-  const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;
-  openM(`<div class="m-hdr"><div class="m-title">設定 ${esc(s.name)}</div><button class="m-close" onclick="closeM()">✕</button></div>
-  <div class="m-body">
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-size:11px;color:#64748b;text-transform:uppercase">目前庫存</div>
-      <div style="font-size:34px;font-weight:800;color:#6366f1">${s.qty}</div>
-    </div>
-    <div class="fg"><label class="fl">新數量</label><input class="inp" type="number" min="0" id="fSQ" value="${s.qty}"></div>
-    <div class="fa">
-      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="applyStatAdj('${id}')">套用</button>
-    </div>
-  </div>`);
-}
-function applyStatAdj(id){
-  const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;
-  s.qty=parseInt(document.getElementById('fSQ').value)||0;
-  save();closeM();renderStat();toast('已更新');
-}
-function deleteStat(id){
-  if(!confirm('確定刪除此文具品項？'))return;
-  state.supplies.stationery=(state.supplies.stationery||[]).filter(x=>x.id!==id);
-  save();renderStat();toast('已刪除');
-}
-function openAddStatModal(){
-  openM(`<div class="m-hdr"><div class="m-title">新增文具</div><button class="m-close" onclick="closeM()">✕</button></div>
-  <div class="m-body">
-    <div class="fg"><label class="fl">文具名稱 *</label><input class="inp" id="fASN" placeholder="名稱"></div>
-    <div class="fg"><label class="fl">初始數量</label><input class="inp" type="number" min="0" id="fASQ" value="0"></div>
-    <div class="fa">
-      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addStat2()">新增</button>
-    </div>
-  </div>`);
-}
-function addStat2(){
-  const name=document.getElementById('fASN').value.trim();if(!name){toast('請輸入名稱','err');return;}
-  if(!state.supplies)state.supplies={equipment:[],stationery:[]};
-  if(!state.supplies.stationery)state.supplies.stationery=[];
-  state.supplies.stationery.push({id:'S'+Date.now(),name,qty:parseInt(document.getElementById('fASQ').value)||0,records:[]});
-  save();closeM();renderStat();toast('文具已新增');
-}
+function adjStat(id,delta){const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;s.qty=Math.max(0,s.qty+delta);save();renderStat();toast(delta>0?'＋1':'－1');}
+function openAdjStat(id){const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;openM(`<div class="m-hdr"><div class="m-title">設定 ${esc(s.name)}</div><button class="m-close" onclick="closeM()">✕</button></div><div class="m-body"><div style="text-align:center;margin-bottom:16px"><div style="font-size:11px;color:#64748b;text-transform:uppercase">目前庫存</div><div style="font-size:34px;font-weight:800;color:#6366f1">${s.qty}</div></div><div class="fg"><label class="fl">新數量</label><input class="inp" type="number" min="0" id="fSQ" value="${s.qty}"></div><div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="applyStatAdj('${id}')">套用</button></div></div>`);}
+function applyStatAdj(id){const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;s.qty=parseInt(document.getElementById('fSQ').value)||0;save();closeM();renderStat();toast('已更新');}
+function deleteStat(id){if(!confirm('確定刪除？'))return;state.supplies.stationery=(state.supplies.stationery||[]).filter(x=>x.id!==id);save();renderStat();toast('已刪除');}
+function openAddStatModal(){openM(`<div class="m-hdr"><div class="m-title">新增文具</div><button class="m-close" onclick="closeM()">✕</button></div><div class="m-body"><div class="fg"><label class="fl">文具名稱 *</label><input class="inp" id="fASN" placeholder="名稱"></div><div class="fg"><label class="fl">初始數量</label><input class="inp" type="number" min="0" id="fASQ" value="0"></div><div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="addStat2()">新增</button></div></div>`);}
+function addStat2(){const name=document.getElementById('fASN').value.trim();if(!name){toast('請輸入名稱','err');return;}if(!state.supplies)state.supplies={equipment:[],stationery:[]};if(!state.supplies.stationery)state.supplies.stationery=[];state.supplies.stationery.push({id:'S'+Date.now(),name,qty:parseInt(document.getElementById('fASQ').value)||0,records:[]});save();closeM();renderStat();toast('文具已新增');}
 
-/* ── FUND ── */
+/* ═══ FUND ═══ */
 function renderFund(){
   const recs=(state.fund&&state.fund.records)||[];
   const totalIn=recs.filter(r=>r.type==='in').reduce((s,r)=>s+Number(r.amount),0);
@@ -691,46 +917,33 @@ function renderFund(){
 function openFundModal(){
   openM(`<div class="m-hdr"><div class="m-title">💰 新增收支記錄</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
-    <div class="fg"><label class="fl">類型</label>
-      <select class="inp" id="fFT"><option value="in">收入</option><option value="out">支出</option></select></div>
+    <div class="fg"><label class="fl">類型</label><select class="inp" id="fFT"><option value="in">收入</option><option value="out">支出</option></select></div>
     <div class="frow">
       <div class="fg"><label class="fl">日期</label><input class="inp" type="date" id="fFD" value="${today()}"></div>
       <div class="fg"><label class="fl">金額（元）</label><input class="inp" type="number" min="0" id="fFA" placeholder="0"></div>
     </div>
     <div class="fg"><label class="fl">項目說明 *</label><input class="inp" id="fFDesc" placeholder="說明此筆收支用途"></div>
-    <div class="fa">
-      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="addFund()">新增</button>
-    </div>
+    <div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="addFund()">新增</button></div>
   </div>`);
 }
 function addFund(){
-  const description=document.getElementById('fFDesc').value.trim();
-  if(!description){toast('請輸入項目說明','err');return;}
-  const amount=parseFloat(document.getElementById('fFA').value)||0;
-  if(amount<=0){toast('請輸入金額','err');return;}
+  const description=document.getElementById('fFDesc').value.trim();if(!description){toast('請輸入項目說明','err');return;}
+  const amount=parseFloat(document.getElementById('fFA').value)||0;if(amount<=0){toast('請輸入金額','err');return;}
   if(!state.fund)state.fund={records:[]};if(!state.fund.records)state.fund.records=[];
-  state.fund.records.push({id:'f'+uid('fr'),date:document.getElementById('fFD').value,
-    description,amount,type:document.getElementById('fFT').value});
+  state.fund.records.push({id:'f'+uid('fr'),date:document.getElementById('fFD').value,description,amount,type:document.getElementById('fFT').value});
   save();closeM();renderFund();toast('記錄已新增');
 }
-function deleteFund(id){
-  if(!confirm('確定刪除此記錄？'))return;
-  state.fund.records=(state.fund.records||[]).filter(r=>r.id!==id);
-  save();renderFund();toast('已刪除');
-}
+function deleteFund(id){if(!confirm('確定刪除？'))return;state.fund.records=(state.fund.records||[]).filter(r=>r.id!==id);save();renderFund();toast('已刪除');}
 
-/* ── INIT ── */
-function renderAll(){
-  ({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[curTab]?.();
-}
+/* ═══ INIT ═══ */
+function renderAll(){({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[curTab]?.();}
 function init(){
   const d=new Date();
   document.getElementById('hdrDate').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' ('+['日','一','二','三','四','五','六'][d.getDay()]+')';
-  try{const s=localStorage.getItem(SKEY);if(s)state=Object.assign(JSON.parse(JSON.stringify(DEF)),JSON.parse(s));}catch(_){}
+  try{const s=localStorage.getItem(SKEY);if(s)state=mergeRemote(JSON.parse(s));}catch(_){}
   renderAll();
   loadData(true);
-  setInterval(()=>loadData(true),30000);
+  setInterval(()=>loadData(false),30000);
 }
 init();
 </script>
