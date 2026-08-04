@@ -446,7 +446,7 @@ async function loadData(rr){
     if(hasData){
       const remoteTs=remote._lastModified||0;
       const localTs=state._lastModified||0;
-      if(rr||remoteTs>=localTs){
+      if(remoteTs>=localTs){
         state=mergeRemote(remote);try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}
       }
       setSS('ok','✅ 已同步');if(rr)renderAll();
@@ -674,8 +674,8 @@ function renderMachineTable(){
     let badge,action;
     if(isRet){badge=`<span class="badge b-ok">✅ 已歸還</span>`;action=`<button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">🗑</button>`;}
     else if(isFut){badge=`<span class="badge b-info">📅 預約中</span>`;action=`<button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏ 編輯</button> <button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">✕ 取消</button>`;}
-    else if(isOver){badge=`<span class="badge b-low">⚠️ 逾期</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
-    else{badge=`<span class="badge b-warn">借出中</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
+    else if(isOver){badge=`<span class="badge b-low">⚠️ 逾期</span>`;action=`<button class="btn btn-ok btn-xs" onclick="openReturnModal('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
+    else{badge=`<span class="badge b-warn">借出中</span>`;action=`<button class="btn btn-ok btn-xs" onclick="openReturnModal('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
     return `<tr class="${trCls}">
       <td>${badge}</td>
       <td>${(r.date||'').replace(/-/g,'/')}</td>
@@ -742,7 +742,32 @@ function _mfd(){return{borrower:document.getElementById('fBP').value.trim(),dept
 function addBorrow(){const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}if(!state.machines.records)state.machines.records=[];state.machines.records.push({id:'mr'+uid('mr'),...d,returned:false});save();closeM();renderMachines();toast('借用記錄已新增');}
 function saveMachineEdit(id){const rec=(state.machines.records||[]).find(x=>x.id===id);if(!rec)return;const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}Object.assign(rec,d);save();closeM();renderMachines();toast('記錄已更新');}
 function deleteMR(id){if(!confirm('確定刪除此記錄？'))return;state.machines.records=(state.machines.records||[]).filter(r=>r.id!==id);save();renderMachines();toast('已刪除');}
-function returnMachine(id){const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;r.returned=true;r.returnedDate=today();save();renderMachines();toast('已標記歸還');}
+function openReturnModal(id){
+  const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;
+  const nums=(r.machineNums&&r.machineNums.length)?r.machineNums.map(n=>'#'+n).join('、'):'未指定';
+  openM(`<div class="m-hdr"><div class="m-title">確認歸還</div><button class="m-close" onclick="closeM()">✕</button></div>
+  <div class="m-body">
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:18px">
+      <div style="font-size:14px;color:#78350f;font-weight:700;margin-bottom:6px">📋 ${esc(r.borrower)} 借用 ${r.count} 台（${nums}）</div>
+      <div style="font-size:12px;color:#92400e">借出日：${(r.date||'').replace(/-/g,'/')} · 預計歸還：${r.returnDate?(r.returnDate.replace(/-/g,'/')):'—'}</div>
+    </div>
+    <div class="fg"><label class="fl">實際歸還日期</label><input class="inp" type="date" id="retDate" value="${today()}"></div>
+    <div class="fg"><label class="fl">備註（選填）</label><input class="inp" id="retNote" placeholder="選填"></div>
+    <div class="fa">
+      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
+      <button class="btn btn-ok btn-sm" onclick="confirmReturn('${id}')">✓ 確認歸還</button>
+    </div>
+  </div>\`);
+}
+function confirmReturn(id){
+  const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;
+  const retDate=document.getElementById('retDate').value;
+  const note=document.getElementById('retNote').value.trim();
+  r.returned=true;r.returnedDate=retDate||today();
+  if(note)r.notes=(r.notes?r.notes+' | ':'')+note;
+  save();closeM();renderMachines();toast('已標記歸還');
+}
+function returnMachine(id){openReturnModal(id);}
 
 /* ═══ MEAL CARD ═══ */
 function getMealRunningBal(){
