@@ -1,3 +1,7 @@
+https://raw.githubusercontent.com/amyrahami/asus-mgmt-deploy/main/index.html
+→ https://raw.githubusercontent.com/amyrahami/asus-mgmt-deploy/main/index.html
+Content-Type: text/plain; charset=utf-8
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -446,7 +450,7 @@ async function loadData(rr){
     if(hasData){
       const remoteTs=remote._lastModified||0;
       const localTs=state._lastModified||0;
-      if(rr||remoteTs>=localTs){
+      if(remoteTs>=localTs){
         state=mergeRemote(remote);try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}
       }
       setSS('ok','✅ 已同步');if(rr)renderAll();
