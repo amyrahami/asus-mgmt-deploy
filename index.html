@@ -1,7 +1,3 @@
-https://raw.githubusercontent.com/amyrahami/asus-mgmt-deploy/main/index.html
-→ https://raw.githubusercontent.com/amyrahami/asus-mgmt-deploy/main/index.html
-Content-Type: text/plain; charset=utf-8
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -193,30 +189,6 @@ th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--accent
     <button class="btn btn-p btn-sm" onclick="openBorrowModal(null)">＋ 我要借刷卡機</button>
   </div>
   <div class="mc-grid" id="machineCards"></div>
-  <div class="g" style="margin-bottom:0">
-    <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--bd)">
-      <div style="font-size:14px;font-weight:700">借用紀錄</div>
-      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
-        <input class="inp" id="mSearch" placeholder="搜尋借用人…" oninput="renderMachineTable()" style="width:130px;padding:5px 10px">
-        <select class="inp" id="mFilter" onchange="renderMachineTable()" style="width:auto;padding:5px 10px">
-          <option value="">全部紀錄</option>
-          <option value="active">借出中／待確認</option>
-          <option value="returned">已歸還</option>
-          <option value="future">未來預約</option>
-        </select>
-        <button class="sort-btn" id="mSortBtn" onclick="toggleMSort()">📅 新→舊</button>
-      </div>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th>歸還</th>
-        <th class="sortable" onclick="toggleMSort()">借用日期 <span id="mSortArrow">↓</span></th>
-        <th>時間</th><th>借用人</th><th>台數</th><th>機器編號</th>
-        <th>使用地點</th><th>領取地點</th><th>歸還日期</th><th>備註</th><th>操作</th>
-      </tr></thead>
-      <tbody id="machineBody"></tbody>
-    </table></div>
-  </div>
 </div>
 
 <!-- ═══ MEAL CARD ═══ -->
@@ -376,28 +348,12 @@ const DEF={
       {date:'2025-11-21',qty:40,purpose:'',by:'Stacy'}
     ]}
   ],
-  machines:{
-    total:4,
-    records:[
-      {id:'mr1', date:'2026-04-16',time:'',     borrower:'(早期紀錄)',   dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-04-16',notes:'',returned:true},
-      {id:'mr2', date:'2026-04-28',time:'10:30',borrower:'Wendy',        dept:'',count:1,machineNums:[1],  useLocation:'',             pickupLocation:'立德8F',returnDate:'2026-04-28',notes:'',returned:true},
-      {id:'mr3', date:'2026-05-05',time:'11:30',borrower:'Wendy',        dept:'',count:1,machineNums:[3],  useLocation:'',             pickupLocation:'立德8F',returnDate:'',          notes:'',returned:true},
-      {id:'mr4', date:'2026-05-05',time:'13:00',borrower:'Irene',        dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-05-07',notes:'精實思維_始計篇、與施先生有約',returned:true},
-      {id:'mr5', date:'2026-05-13',time:'15:00',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[1,4],useLocation:'立功1F-國際會議廳',pickupLocation:'立功4F',returnDate:'2026-05-14',notes:'前瞻技術論壇',returned:true},
-      {id:'mr6', date:'2026-05-04',time:'',     borrower:'文化月',       dept:'',count:1,machineNums:[2],  useLocation:'',             pickupLocation:'',     returnDate:'2026-05-29',notes:'文化月長借1個月',returned:true},
-      {id:'mr7', date:'2026-05-19',time:'13:00',borrower:'Irene',        dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'立功4F',returnDate:'',          notes:'精實思維_實戰篇',returned:true},
-      {id:'mr8', date:'2026-05-22',time:'09:30',borrower:'Cathy',        dept:'',count:1,machineNums:[4],  useLocation:'立功2F-A01會議室',pickupLocation:'立功4F',returnDate:'2026-05-22',notes:'專題講座',returned:true},
-      {id:'mr9', date:'2026-05-29',time:'',     borrower:'Candy',        dept:'',count:2,machineNums:[1,3],useLocation:'立德',         pickupLocation:'立德8F',returnDate:'2026-06-04',notes:'Op TekTrend',returned:true},
-      {id:'mr10',date:'2026-05-29',time:'',     borrower:'Mandy Lee',    dept:'',count:2,machineNums:[1,4],useLocation:'',             pickupLocation:'',     returnDate:'2026-06-04',notes:'Computex TekTrend',returned:true},
-      {id:'mr11',date:'2026-06-12',time:'',     borrower:'Robert Lcc',   dept:'',count:2,machineNums:[2,4],useLocation:'',             pickupLocation:'立功4F',returnDate:'',          notes:'⚠ 尚未確認歸還',returned:false},
-      {id:'mr12',date:'2026-06-17',time:'',     borrower:'Sammi Chang',  dept:'',count:1,machineNums:[2],  useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'⚠ 尚未確認歸還',returned:false},
-      {id:'mr13',date:'2026-06-26',time:'09:30',borrower:'Cathy Sung',   dept:'',count:1,machineNums:[2],  useLocation:'立功2F-A01會議室',pickupLocation:'立功4F',returnDate:'2026-06-26',notes:'專題講座',returned:true},
-      {id:'mr14',date:'2026-07-03',time:'09:30',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[],   useLocation:'立功1F-國際會議廳',pickupLocation:'立功4F',returnDate:'2026-07-03',notes:'前瞻技術論壇',returned:false},
-      {id:'mr15',date:'2026-07-09',time:'11:45',borrower:'Cathy Sung',   dept:'',count:2,machineNums:[],   useLocation:'',             pickupLocation:'立功4F',returnDate:'2026-07-09',notes:'',returned:false},
-      {id:'mr16',date:'2026-07-08',time:'',     borrower:'Sammi Chang',  dept:'',count:1,machineNums:[],   useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'',returned:false},
-      {id:'mr17',date:'2026-07-02',time:'',     borrower:'Alan',         dept:'',count:1,machineNums:[],   useLocation:'',             pickupLocation:'',     returnDate:'',          notes:'趨勢講座',returned:false}
-    ]
-  },
+  machines:[
+    {num:1,status:'available',borrower:'',dept:'',useLocation:'',pickupLocation:'',since:'',notes:''},
+    {num:2,status:'borrowed',borrower:'Sammi Chang',dept:'',useLocation:'',pickupLocation:'',since:'2026-06-17',notes:'⚠ 尚未確認歸還（沿用舊系統最後紀錄）'},
+    {num:3,status:'available',borrower:'',dept:'',useLocation:'',pickupLocation:'',since:'',notes:''},
+    {num:4,status:'borrowed',borrower:'Robert Lcc',dept:'',useLocation:'',pickupLocation:'立功4F',since:'2026-06-12',notes:'⚠ 尚未確認歸還（沿用舊系統最後紀錄）'}
+  ],
   mealCard:{cardNo:'AAX110676',dept:'人才發展課',initialBalance:0,nextId:100,records:[]},
   supplies:{
     equipment:[
@@ -429,7 +385,7 @@ function mergeRemote(remote){
     const _li={};(state.gifts||[]).forEach(g=>{if(g.image)_li[g.id]=g.image;});
     base.gifts.forEach(g=>{if(!g.image&&_li[g.id])g.image=_li[g.id];});
   }
-  if(remote.machines&&remote.machines.records&&remote.machines.records.length>0)base.machines=remote.machines;
+  if(remote.machines&&Array.isArray(remote.machines)&&remote.machines.length>0)base.machines=remote.machines;
   if(remote.mealCard){
     if(remote.mealCard.records&&remote.mealCard.records.length>0)base.mealCard=remote.mealCard;
     else base.mealCard=Object.assign(base.mealCard,{cardNo:remote.mealCard.cardNo||base.mealCard.cardNo,dept:remote.mealCard.dept||base.mealCard.dept,initialBalance:remote.mealCard.initialBalance||0,nextId:remote.mealCard.nextId||100,records:[]});
@@ -630,123 +586,83 @@ function dispatchGift(id){
   save();closeM();renderGifts();toast(`出庫 ${qty} 件`);
 }
 
-/* ═══ MACHINES ═══ */
-function getMachineInfo(n){
-  const t=today();
-  const active=(state.machines.records||[]).filter(r=>!r.returned&&r.date<=t&&(r.machineNums||[]).includes(n));
-  const future=(state.machines.records||[]).filter(r=>!r.returned&&r.date>t&&(r.machineNums||[]).includes(n));
-  if(active.length>0)return{status:'bw',label:'外借中',borrower:active[active.length-1].borrower,returnDate:active[active.length-1].returnDate};
-  if(future.length>0)return{status:'res',label:'已預約',borrower:future[0].borrower,returnDate:future[0].returnDate};
-  return{status:'av',label:'可借用',borrower:'',returnDate:''};
-}
+/* ═══ MACHINES ═══ (只記錄現在狀態，不記歷史) */
 function renderMachines(){
-  const total=state.machines.total||4;
-  let mh='';
-  for(let i=1;i<=total;i++){
-    const info=getMachineInfo(i);
-    const icon=info.status==='av'?'✅':info.status==='res'?'🟡':'🔴';
-    mh+=`<div class="mc ${info.status}">
-      <div style="font-size:26px;font-weight:800;color:${info.status==='av'?'#10b981':info.status==='res'?'#f59e0b':'#ef4444'}">#${i}</div>
-      <div style="font-size:12px;font-weight:700;margin:4px 0;color:${info.status==='av'?'#10b981':info.status==='res'?'#f59e0b':'#ef4444'}">${icon} ${info.label}</div>
-      ${info.borrower?`<div style="font-size:11px;color:#64748b">借用人：${esc(info.borrower)}</div>`:'<div style="font-size:11px;color:#94a3b8">—</div>'}
-      ${info.returnDate?`<div style="font-size:11px;color:#94a3b8">歸還：${info.returnDate.replace(/-/g,'/')}</div>`:''}</div>`;
-  }
-  const t=today();
-  const unassigned=(state.machines.records||[]).filter(r=>!r.returned&&r.date<=t&&(!r.machineNums||r.machineNums.length===0));
-  if(unassigned.length){mh+=`<div class="mc" style="border-color:rgba(245,158,11,.3);grid-column:1/-1;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 16px"><div style="font-size:18px">⚠️</div><div style="font-size:12px;color:#92400e">${unassigned.length} 筆借用記錄未指定機台：${unassigned.map(r=>r.borrower).join('、')}</div></div>`;}
-  document.getElementById('machineCards').innerHTML=mh;
-  renderMachineTable();
-}
-function toggleMSort(){mSortAsc=!mSortAsc;const b=document.getElementById('mSortBtn');if(b)b.textContent=mSortAsc?'📅 舊→新':'📅 新→舊';const a=document.getElementById('mSortArrow');if(a)a.textContent=mSortAsc?'↑':'↓';renderMachineTable();}
-function renderMachineTable(){
-  const fv=document.getElementById('mFilter')?.value||'';
-  const sv=(document.getElementById('mSearch')?.value||'').trim().toLowerCase();
-  const t=today();
-  let recs=[...(state.machines.records||[])];
-  if(fv==='active')recs=recs.filter(r=>!r.returned&&r.date<=t);
-  else if(fv==='returned')recs=recs.filter(r=>r.returned===true);
-  else if(fv==='future')recs=recs.filter(r=>r.date>t);
-  if(sv)recs=recs.filter(r=>(r.borrower||'').toLowerCase().includes(sv));
-  recs.sort((a,b)=>{const c=(a.date||'').localeCompare(b.date||'');return mSortAsc?c:-c;});
-  if(!recs.length){document.getElementById('machineBody').innerHTML='<tr><td colspan="11" style="text-align:center;padding:32px;color:#94a3b8">無符合條件的紀錄</td></tr>';return;}
-  document.getElementById('machineBody').innerHTML=recs.map(r=>{
-    const isRet=r.returned===true;
-    const isFut=r.date&&r.date>t;
-    const isOver=!isRet&&!isFut&&r.returnDate&&r.returnDate<t;
-    const trCls=isRet?'tr-returned':isFut?'tr-future':isOver?'tr-overdue':'';
-    const nums=(r.machineNums&&r.machineNums.length)?r.machineNums.map(n=>'#'+n).join('、'):'待分配';
-    let badge,action;
-    if(isRet){badge=`<span class="badge b-ok">✅ 已歸還</span>`;action=`<button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">🗑</button>`;}
-    else if(isFut){badge=`<span class="badge b-info">📅 預約中</span>`;action=`<button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏ 編輯</button> <button class="btn btn-d btn-xs" onclick="deleteMR('${r.id}')">✕ 取消</button>`;}
-    else if(isOver){badge=`<span class="badge b-low">⚠️ 逾期</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
-    else{badge=`<span class="badge b-warn">借出中</span>`;action=`<button class="btn btn-ok btn-xs" onclick="returnMachine('${r.id}')">↩ 歸還</button> <button class="btn btn-g btn-xs" onclick="openBorrowModal('${r.id}')">✏</button>`;}
-    return `<tr class="${trCls}">
-      <td>${badge}</td>
-      <td>${(r.date||'').replace(/-/g,'/')}</td>
-      <td>${r.time||'—'}</td>
-      <td><strong>${esc(r.borrower)}</strong>${r.dept?`<br><span style="font-size:11px;color:#94a3b8">${esc(r.dept)}</span>`:''}</td>
-      <td>${r.count}</td>
-      <td>${nums}</td>
-      <td>${esc(r.useLocation||'—')}</td>
-      <td>${esc(r.pickupLocation||'—')}</td>
-      <td>${r.returnDate?(r.returnDate.replace(/-/g,'/')):'—'}</td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.notes||'')}">${esc(r.notes||'—')}</td>
-      <td style="white-space:nowrap">${action}</td>
-    </tr>`;
+  document.getElementById('machineCards').innerHTML=state.machines.map(m=>{
+    const isAv=m.status==='available';
+    const color=isAv?'#10b981':'#ef4444';
+    const icon=isAv?'✅':'🔴';
+    const label=isAv?'可借用':'借出中';
+    return `<div class="mc ${isAv?'av':'bw'}">
+      <div style="font-size:26px;font-weight:800;color:${color}">#${m.num}</div>
+      <div style="font-size:12px;font-weight:700;margin:4px 0;color:${color}">${icon} ${label}</div>
+      ${m.borrower?`<div style="font-size:11px;color:#64748b">借用人：${esc(m.borrower)}${m.dept?`（${esc(m.dept)}）`:''}</div>`:'<div style="font-size:11px;color:#94a3b8">—</div>'}
+      ${m.since?`<div style="font-size:11px;color:#94a3b8">借出日：${m.since.replace(/-/g,'/')}</div>`:''}
+      ${m.useLocation?`<div style="font-size:11px;color:#94a3b8">地點：${esc(m.useLocation)}</div>`:''}
+      <div style="margin-top:8px">${isAv
+        ?`<button class="btn btn-ok btn-xs" onclick="openBorrowModal(${m.num})">借出</button>`
+        :`<button class="btn btn-g btn-xs" onclick="returnMachine(${m.num})">↩ 歸還</button>`}</div>
+    </div>`;
   }).join('');
 }
 function buildMachineChecks(selNums){
-  const t=today();let html='';
-  for(let n=1;n<=(state.machines.total||4);n++){
-    const info=getMachineInfo(n);
-    const mine=selNums.includes(n);
-    const unavail=(info.status==='bw'||info.status==='res')&&!mine;
-    const cls='mchk'+(selNums.includes(n)?' mchk-on':'')+(unavail?' mchk-unavail':'');
-    const dotCls=unavail?'bw':(selNums.includes(n)?'av':'av');
-    const lbl=unavail?`#${n} (${esc(info.borrower)})`:`#${n}`;
-    html+=`<div class="${cls}" id="mck${n}"${unavail?'':` onclick="toggleMck(${n})"`}><div class="mchk-dot ${info.status}"></div><span>${lbl}</span></div>`;
-  }
+  let html='';
+  state.machines.forEach(m=>{
+    const isAv=m.status==='available';
+    const checked=selNums.includes(m.num);
+    const unavail=!isAv&&!checked;
+    const cls='mchk'+(checked?' mchk-on':'')+(unavail?' mchk-unavail':'');
+    const lbl=unavail?`#${m.num} (${esc(m.borrower||'借出中')})`:`#${m.num}`;
+    html+=`<div class="${cls}" id="mck${m.num}"${unavail?'':` onclick="toggleMck(${m.num})"`}><div class="mchk-dot ${isAv?'av':'bw'}"></div><span>${lbl}</span></div>`;
+  });
   return html;
 }
 function toggleMck(n){const el=document.getElementById('mck'+n);if(!el||el.classList.contains('mchk-unavail'))return;el.classList.toggle('mchk-on');}
-function getSelMcks(){const sel=[];for(let n=1;n<=(state.machines.total||4);n++){const el=document.getElementById('mck'+n);if(el&&el.classList.contains('mchk-on'))sel.push(n);}return sel;}
-function openBorrowModal(editId){
-  const r=editId?((state.machines.records||[]).find(x=>x.id===editId)):null;
-  const sel=r?(r.machineNums||[]):[];
-  openM(`<div class="m-hdr"><div class="m-title">${r?'✏️ 編輯借用記錄':'💳 新增借用記錄'}</div><button class="m-close" onclick="closeM()">✕</button></div>
+function getSelMcks(){const sel=[];state.machines.forEach(m=>{const el=document.getElementById('mck'+m.num);if(el&&el.classList.contains('mchk-on'))sel.push(m.num);});return sel;}
+function openBorrowModal(preNum){
+  const sel=preNum?[preNum]:[];
+  openM(`<div class="m-hdr"><div class="m-title">💳 借出刷卡機</div><button class="m-close" onclick="closeM()">✕</button></div>
   <div class="m-body">
     <div class="frow">
-      <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fBP" value="${r?esc(r.borrower):''}"></div>
-      <div class="fg"><label class="fl">部門</label><input class="inp" id="fBDep" value="${r?esc(r.dept||''):''}"></div>
+      <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fBP"></div>
+      <div class="fg"><label class="fl">部門</label><input class="inp" id="fBDep"></div>
     </div>
-    <div class="frow">
-      <div class="fg"><label class="fl">借用日期</label><input class="inp" type="date" id="fBDate" value="${r?r.date:today()}"></div>
-      <div class="fg"><label class="fl">時間</label><input class="inp" id="fBTime" placeholder="e.g. 09:30" value="${r?esc(r.time||''):''}"></div>
-    </div>
-    <div class="fg"><label class="fl">指定機台（可多選）</label>
+    <div class="fg"><label class="fl">選擇機台（可多選）</label>
       <div class="mchk-group">${buildMachineChecks(sel)}</div>
     </div>
     <div class="frow">
-      <div class="fg"><label class="fl">台數</label><input class="inp" type="number" min="1" max="${state.machines.total}" id="fBC" value="${r?r.count:1}"></div>
-      <div class="fg"><label class="fl">預計歸還日</label><input class="inp" type="date" id="fBR" value="${r?r.returnDate||'':''}"></div>
+      <div class="fg"><label class="fl">使用地點</label><input class="inp" id="fBUL"></div>
+      <div class="fg"><label class="fl">取機地點</label><input class="inp" id="fBPL"></div>
     </div>
-    <div class="frow">
-      <div class="fg"><label class="fl">使用地點</label><input class="inp" id="fBUL" value="${r?esc(r.useLocation||''):''}"></div>
-      <div class="fg"><label class="fl">取機地點</label><input class="inp" id="fBPL" value="${r?esc(r.pickupLocation||''):''}"></div>
-    </div>
-    <div class="fg"><label class="fl">備註</label><input class="inp" id="fBNotes" value="${r?esc(r.notes||''):''}"></div>
+    <div class="fg"><label class="fl">備註</label><input class="inp" id="fBNotes"></div>
     <div class="fa">
-      ${r?`<button class="btn btn-d btn-sm" onclick="deleteMR('${r.id}');closeM()">刪除</button>`:''}
       <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
-      <button class="btn btn-p btn-sm" onclick="${r?`saveMachineEdit('${r.id}')`:'addBorrow()'}">儲存</button>
+      <button class="btn btn-p btn-sm" onclick="confirmBorrow()">確認借出</button>
     </div>
   </div>`);
 }
-function _mfd(){return{borrower:document.getElementById('fBP').value.trim(),dept:document.getElementById('fBDep').value.trim(),date:document.getElementById('fBDate').value,time:document.getElementById('fBTime').value.trim(),machineNums:getSelMcks(),count:parseInt(document.getElementById('fBC').value)||1,returnDate:document.getElementById('fBR').value,useLocation:document.getElementById('fBUL').value.trim(),pickupLocation:document.getElementById('fBPL').value.trim(),notes:document.getElementById('fBNotes').value.trim()};}
-function addBorrow(){const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}if(!state.machines.records)state.machines.records=[];state.machines.records.push({id:'mr'+uid('mr'),...d,returned:false});save();closeM();renderMachines();toast('借用記錄已新增');}
-function saveMachineEdit(id){const rec=(state.machines.records||[]).find(x=>x.id===id);if(!rec)return;const d=_mfd();if(!d.borrower){toast('請輸入借用人','err');return;}Object.assign(rec,d);save();closeM();renderMachines();toast('記錄已更新');}
-function deleteMR(id){if(!confirm('確定刪除此記錄？'))return;state.machines.records=(state.machines.records||[]).filter(r=>r.id!==id);save();renderMachines();toast('已刪除');}
-function returnMachine(id){const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;r.returned=true;r.returnedDate=today();save();renderMachines();toast('已標記歸還');}
+function confirmBorrow(){
+  const borrower=document.getElementById('fBP').value.trim();
+  if(!borrower){toast('請輸入借用人','err');return;}
+  const nums=getSelMcks();
+  if(!nums.length){toast('請至少選一台機台','err');return;}
+  const dept=document.getElementById('fBDep').value.trim();
+  const useLocation=document.getElementById('fBUL').value.trim();
+  const pickupLocation=document.getElementById('fBPL').value.trim();
+  const notes=document.getElementById('fBNotes').value.trim();
+  const since=today();
+  nums.forEach(n=>{
+    const m=state.machines.find(x=>x.num===n);
+    if(m)Object.assign(m,{status:'borrowed',borrower,dept,useLocation,pickupLocation,notes,since});
+  });
+  save();closeM();renderMachines();toast('已標記借出');
+}
+function returnMachine(n){
+  if(!confirm('確定要標記歸還嗎？'))return;
+  const m=state.machines.find(x=>x.num===n);if(!m)return;
+  Object.assign(m,{status:'available',borrower:'',dept:'',useLocation:'',pickupLocation:'',notes:'',since:''});
+  save();renderMachines();toast('已標記歸還');
+}
 
 /* ═══ MEAL CARD ═══ */
 function getMealRunningBal(){
