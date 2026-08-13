@@ -186,9 +186,16 @@ th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--accent
 <div class="sec" id="sec-machines">
   <div class="sec-hdr">
     <div class="sec-title">💳 刷卡機借用</div>
-    <button class="btn btn-p btn-sm" onclick="openBorrowModal(null)">＋ 我要借刷卡機</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-g btn-sm" onclick="openReserveModal()">📅 我要預約</button>
+      <button class="btn btn-p btn-sm" onclick="openBorrowModal(null)">＋ 我要借刷卡機</button>
+    </div>
   </div>
   <div class="mc-grid" id="machineCards"></div>
+  <div class="g" style="margin-top:14px">
+    <div style="padding:12px 16px;font-size:13px;font-weight:700;border-bottom:1px solid var(--bd)">📅 未來預約</div>
+    <div id="resList"></div>
+  </div>
 </div>
 
 <!-- ═══ MEAL CARD ═══ -->
@@ -370,7 +377,8 @@ const DEF={
     ]
   },
   fund:{records:[]},
-  _ids:{g:300,mr:18,er:1,fr:1}
+  reservations:[],
+  _ids:{g:300,mr:18,er:1,fr:1,rv:1}
 };
 
 let state=JSON.parse(JSON.stringify(DEF));
@@ -392,6 +400,7 @@ function mergeRemote(remote){
   }
   if(remote.supplies)base.supplies=remote.supplies;
   if(remote.fund)base.fund=remote.fund;
+  if(remote.reservations)base.reservations=remote.reservations;
   if(remote._ids)base._ids=remote._ids;
   return base;
 }
@@ -439,7 +448,7 @@ async function _push(){
   setSS('err','⚠️ 儲存失敗，請檢查網路（本機已備份）');saving=false;
 }
 function save(){state._lastModified=Date.now();try{localStorage.setItem(SKEY,JSON.stringify(state));}catch(_){}clearTimeout(saveTimer);saveTimer=setTimeout(_push,1200);}
-function uid(k){if(!state._ids)state._ids={g:300,mr:18,er:1,fr:1};return state._ids[k]++;}
+function uid(k){if(!state._ids)state._ids={g:300,mr:18,er:1,fr:1,rv:1};if(state._ids[k]===undefined)state._ids[k]=1;return state._ids[k]++;}
 function switchTab(tab){
   curTab=tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -453,7 +462,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function today(){return new Date().toISOString().slice(0,10);}
 function toast(msg,type='ok'){const el=document.createElement('div');el.className='ti ti-'+type;el.textContent=msg;document.getElementById('toast').appendChild(el);setTimeout(()=>el.remove(),2800);}
 function openM(html){document.getElementById('mbox').innerHTML=html;document.getElementById('ov').classList.add('open');}
-function closeM(){document.getElementById('ov').classList.remove('open');}
+function closeM(){document.getElementById('ov').classList.remove('open');pendingReservationId=null;}
 document.getElementById('ov').addEventListener('click',e=>{if(e.target===document.getElementById('ov'))closeM();});
 document.getElementById('mbox').addEventListener('click',e=>e.stopPropagation());
 
@@ -604,6 +613,7 @@ function renderMachines(){
         :`<button class="btn btn-g btn-xs" onclick="returnMachine(${m.num})">↩ 歸還</button>`}</div>
     </div>`;
   }).join('');
+  renderReservations();
 }
 function buildMachineChecks(selNums){
   let html='';
@@ -655,6 +665,8 @@ function confirmBorrow(){
     const m=state.machines.find(x=>x.num===n);
     if(m)Object.assign(m,{status:'borrowed',borrower,dept,useLocation,pickupLocation,notes,since});
   });
+  const pid=pendingReservationId;
+  if(pid)state.reservations=(state.reservations||[]).filter(r=>r.id!==pid);
   save();closeM();renderMachines();toast('已標記借出');
 }
 function returnMachine(n){
@@ -662,6 +674,69 @@ function returnMachine(n){
   const m=state.machines.find(x=>x.num===n);if(!m)return;
   Object.assign(m,{status:'available',borrower:'',dept:'',useLocation:'',pickupLocation:'',notes:'',since:''});
   save();renderMachines();toast('已標記歸還');
+}
+
+/* ═══ 未來預約（只是提醒清單，不影響上面「現在狀態」的借出/可借用判斷） ═══ */
+let pendingReservationId=null;
+function openReserveModal(){
+  openM(`<div class="m-hdr"><div class="m-title">📅 預約刷卡機</div><button class="m-close" onclick="closeM()">✕</button></div>
+  <div class="m-body">
+    <div class="frow">
+      <div class="fg"><label class="fl">借用人 *</label><input class="inp" id="fRP"></div>
+      <div class="fg"><label class="fl">部門</label><input class="inp" id="fRDep"></div>
+    </div>
+    <div class="fg"><label class="fl">預約日期 *</label><input class="inp" type="date" id="fRDate" value="${today()}"></div>
+    <div class="fg"><label class="fl">選擇機台（可多選）</label>
+      <div class="mchk-group">${[1,2,3,4].map(n=>`<div class="mchk" id="rck${n}" onclick="toggleRck(${n})"><span>#${n}</span></div>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="fl">備註</label><input class="inp" id="fRNotes"></div>
+    <div class="fa">
+      <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
+      <button class="btn btn-p btn-sm" onclick="confirmReserve()">確認預約</button>
+    </div>
+  </div>`);
+}
+function toggleRck(n){const el=document.getElementById('rck'+n);if(!el)return;el.classList.toggle('mchk-on');}
+function getSelRcks(){const sel=[];[1,2,3,4].forEach(n=>{const el=document.getElementById('rck'+n);if(el&&el.classList.contains('mchk-on'))sel.push(n);});return sel;}
+function confirmReserve(){
+  const borrower=document.getElementById('fRP').value.trim();
+  if(!borrower){toast('請輸入借用人','err');return;}
+  const date=document.getElementById('fRDate').value;
+  if(!date){toast('請選擇預約日期','err');return;}
+  const nums=getSelRcks();
+  if(!nums.length){toast('請至少選一台機台','err');return;}
+  const dept=document.getElementById('fRDep').value.trim();
+  const notes=document.getElementById('fRNotes').value.trim();
+  if(!state.reservations)state.reservations=[];
+  state.reservations.push({id:'rv'+uid('rv'),date,borrower,dept,nums,notes});
+  save();closeM();renderReservations();toast('已新增預約');
+}
+function deleteReservation(id){
+  if(!confirm('確定取消此預約？'))return;
+  state.reservations=(state.reservations||[]).filter(r=>r.id!==id);
+  save();renderReservations();toast('預約已取消');
+}
+function renderReservations(){
+  const el=document.getElementById('resList');if(!el)return;
+  const t=today();
+  const list=(state.reservations||[]).filter(r=>r.date>=t).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!list.length){el.innerHTML='<div style="color:#94a3b8;font-size:12px;padding:12px 16px">目前沒有預約</div>';return;}
+  el.innerHTML=list.map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(226,232,240,.45);font-size:13px">
+    <div><strong>${r.date.replace(/-/g,'/')}</strong> · ${esc(r.borrower)}${r.dept?`（${esc(r.dept)}）`:''} · 機台 ${(r.nums||[]).map(n=>'#'+n).join('、')}${r.notes?` · ${esc(r.notes)}`:''}</div>
+    <div style="display:flex;gap:6px;white-space:nowrap">
+      <button class="btn btn-ok btn-xs" onclick="startBorrowFromReservation('${r.id}')">借出</button>
+      <button class="btn btn-d btn-xs" onclick="deleteReservation('${r.id}')">取消</button>
+    </div>
+  </div>`).join('');
+}
+function startBorrowFromReservation(id){
+  const rv=(state.reservations||[]).find(x=>x.id===id);if(!rv)return;
+  pendingReservationId=id;
+  openBorrowModal(null);
+  document.getElementById('fBP').value=rv.borrower;
+  document.getElementById('fBDep').value=rv.dept||'';
+  document.getElementById('fBNotes').value=rv.notes||'';
+  (rv.nums||[]).forEach(n=>{const el=document.getElementById('mck'+n);if(el&&!el.classList.contains('mchk-unavail'))el.classList.add('mchk-on');});
 }
 
 /* ═══ MEAL CARD ═══ */
