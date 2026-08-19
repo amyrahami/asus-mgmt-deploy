@@ -44,7 +44,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .g{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--glass-s)}
 .btn{padding:8px 16px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;
-  font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+  font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;
+  position:relative;overflow:hidden}
 .btn-p{background:var(--accent);color:white}.btn-p:hover{background:var(--accent2)}
 .btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
 .btn-xs{padding:3px 8px;font-size:11px;border-radius:6px}
@@ -158,6 +159,19 @@ tr.tr-topup td{background:rgba(240,253,244,.35)}
   transition:all .15s;white-space:nowrap}
 .sort-btn:hover{background:rgba(255,255,255,.95)}
 th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--accent)}
+
+/* ── Interaction effects (#06 Ripple / #05 Shake / #13 Card-in) ── */
+.rpl{position:absolute;border-radius:50%;background:rgba(255,255,255,.42);
+  transform:scale(0);animation:rplKey .55s linear;pointer-events:none;z-index:1}
+@keyframes rplKey{to{transform:scale(3.5);opacity:0}}
+@keyframes shakeK{
+  10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(3px)}
+  30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+.shake{animation:shakeK .42s cubic-bezier(.36,.07,.19,.97) both;
+  border-color:var(--err)!important;box-shadow:0 0 0 3px rgba(239,68,68,.18)!important}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.ci{animation:cardIn .32s ease both}
+
 </style>
 </head>
 <body>
@@ -294,7 +308,7 @@ th.sortable{cursor:pointer;user-select:none}th.sortable:hover{color:var(--accent
 <script>
 const JSONBIN_KEY='$2a$10$fWi18E.Cxec0L.WTEKjaU.ALZtnW4bCjzLiJBfG9QdwXChzY5OR12';
 const JSONBIN_BIN='6a66db80f5f4af5e29c5fe27';
-const BIN_URL=`https://api.jsonbin.io/v3/b/${JSONBIN_BIN}`;
+const BIN_URL='https://api.jsonbin.io/v3/b/'+JSONBIN_BIN;
 const BIN_HDR={'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY};
 const SKEY='ld_mgmt_v1';
 
@@ -472,20 +486,19 @@ async function loadData(rr){
     setSS('err','⚠️ 離線模式（本機）');if(rr)renderAll();
   }
 }
-
 async function _push(){
   if(saving){saveTimer=setTimeout(_push,800);return;}
   saveTimer=null;saving=true;setSS('busy','儲存中…');
   let tries=0;
   while(tries<3){
     try{
-      const pushData=JSON.parse(JSON.stringify(state));(pushData.gifts||[]).forEach(g=>{if((g.image||'').length>20000)g.image='';});((pushData.supplies&&pushData.supplies.stationery)||[]).forEach(s=>{if((s.image||'').length>20000)s.image='';});
+      const pushData=JSON.parse(JSON.stringify(state));(pushData.gifts||[]).forEach(function(g){if((g.image||'').length>20000)g.image='';});((pushData.supplies&&pushData.supplies.stationery)||[]).forEach(function(s){if((s.image||'').length>20000)s.image='';});
       const r=await fetch(BIN_URL,{method:'PUT',headers:BIN_HDR,body:JSON.stringify(pushData)});
       if(!r.ok)throw new Error('HTTP '+r.status);
       setSS('ok','✅ 已儲存');saving=false;return;
     }catch(e){
       tries++;
-      if(tries<3)await new Promise(r=>setTimeout(r,1500*tries));
+      if(tries<3)await new Promise(function(r){setTimeout(r,1500*tries)});
     }
   }
   setSS('err','⚠️ 儲存失敗，請檢查網路（本機已備份）');saving=false;
@@ -498,7 +511,8 @@ function switchTab(tab){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   document.getElementById('sec-'+tab).classList.add('active');
-  ({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[tab]?.();
+  var _f=({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[tab];if(_f)_f();
+  requestAnimationFrame(()=>animCards(tab));
 }
 function switchSupTab(t){supTab=t;document.querySelectorAll('.stab').forEach(x=>x.classList.remove('active'));document.getElementById('stab-'+t).classList.add('active');document.getElementById('sup-equip').style.display=t==='equip'?'':'none';document.getElementById('sup-stat').style.display=t==='stat'?'':'none';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -525,7 +539,7 @@ function renderGifts(){
     return `<div class="gift-card" onclick="openGiftDetail('${g.id}')">${thumb}
       <div class="gift-name">${esc(g.name)}</div>
       ${g.note?`<div style="font-size:11px;color:#94a3b8;margin-bottom:4px">${esc(g.note)}</div>`:''}
-      <div class="gift-row"><span style="font-size:20px;font-weight:700;color:${qc}">${g.qty??'?'}</span><span class="badge ${bc}">${bt}</span></div>
+      <div class="gift-row"><span style="font-size:20px;font-weight:700;color:${qc}">${g.qty!=null?g.qty:'?'}</span><span class="badge ${bc}">${bt}</span></div>
       ${g.location?`<div style="font-size:11px;color:#94a3b8;margin-top:5px">📍 ${esc(g.location)}</div>`:''}
     </div>`;
   }).join('');
@@ -536,7 +550,7 @@ function openGiftModal(id){
   <div class="m-body">
     <div class="fg"><label class="fl">品項名稱 *</label><input class="inp" id="fGN" value="${g?esc(g.name):''}"></div>
     <div class="frow">
-      <div class="fg"><label class="fl">數量</label><input class="inp" id="fGQ" type="number" min="0" value="${g?g.qty??'':0}"></div>
+      <div class="fg"><label class="fl">數量</label><input class="inp" id="fGQ" type="number" min="0" value="${g?(g.qty!=null?g.qty:''):0}"></div>
       <div class="fg"><label class="fl">低庫存警示值</label><input class="inp" id="fGM" type="number" min="0" value="${g?g.minQty||0:5}"></div>
     </div>
     <div class="frow">
@@ -574,7 +588,7 @@ function openGiftDetail(id){
     ${g.image?`<div style="text-align:center;margin-bottom:14px"><img src="${g.image}" onclick="openImgLightbox('${g.id}')" style="max-width:100%;max-height:180px;object-fit:contain;border-radius:10px;cursor:zoom-in;box-shadow:0 2px 12px rgba(0,0,0,.12)"><div style="font-size:11px;color:#94a3b8;margin-top:4px">點擊放大</div></div>`:''}
     <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap">
       <div><div style="font-size:11px;color:#64748b;text-transform:uppercase">庫存</div>
-        <div style="font-size:28px;font-weight:800;color:${st==='ok'?'#6366f1':'#ef4444'}">${g.qty??'?'}</div></div>
+        <div style="font-size:28px;font-weight:800;color:${st==='ok'?'#6366f1':'#ef4444'}">${g.qty!=null?g.qty:'?'}</div></div>
       <div><div style="font-size:11px;color:#64748b">位置</div><div style="font-size:13px;margin-top:3px">${esc(g.location||'—')}</div></div>
       <div><div style="font-size:11px;color:#64748b">類別</div><div style="font-size:13px;margin-top:3px">${esc(g.category||'—')}</div></div>
       ${g.note?`<div style="width:100%"><div style="font-size:11px;color:#64748b">備註</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">${esc(g.note)}</div></div>`:''}
@@ -623,7 +637,7 @@ function openDispatchModal(id){
   <div class="m-body">
     <div class="frow">
       <div class="fg"><label class="fl">日期</label><input class="inp" type="date" id="fDD" value="${today()}"></div>
-      <div class="fg"><label class="fl">數量（庫存 ${g.qty??'?'}）</label><input class="inp" type="number" min="1" id="fDQ" value="1"></div>
+      <div class="fg"><label class="fl">數量（庫存 ${g.qty!=null?g.qty:'?'}）</label><input class="inp" type="number" min="1" id="fDQ" value="1"></div>
     </div>
     <div class="fg"><label class="fl">用途</label><input class="inp" id="fDP" placeholder="e.g. 員工生日"></div>
     <div class="fg"><label class="fl">領取人</label><input class="inp" id="fDB" placeholder="姓名"></div>
@@ -673,8 +687,8 @@ function renderMachines(){
 }
 function toggleMSort(){mSortAsc=!mSortAsc;const b=document.getElementById('mSortBtn');if(b)b.textContent=mSortAsc?'📅 舊→新':'📅 新→舊';const a=document.getElementById('mSortArrow');if(a)a.textContent=mSortAsc?'↑':'↓';renderMachineTable();}
 function renderMachineTable(){
-  const fv=document.getElementById('mFilter')?.value||'';
-  const sv=(document.getElementById('mSearch')?.value||'').trim().toLowerCase();
+  const fv=(document.getElementById('mFilter')||{}).value||'';
+  const sv=((document.getElementById('mSearch')||{}).value||'').trim().toLowerCase();
   const t=today();
   let recs=[...(state.machines.records||[])];
   if(fv==='active')recs=recs.filter(r=>!r.returned&&r.date<=t);
@@ -775,7 +789,7 @@ function openReturnModal(id){
       <button class="btn btn-g btn-sm" onclick="closeM()">取消</button>
       <button class="btn btn-ok btn-sm" onclick="confirmReturn('${id}')">✓ 確認歸還</button>
     </div>
-  </div>\`);
+  </div>`);
 }
 function confirmReturn(id){
   const r=(state.machines.records||[]).find(x=>x.id===id);if(!r)return;
@@ -811,8 +825,8 @@ function renderMealCard(){
 }
 function toggleMlSort(){mlSortAsc=!mlSortAsc;const b=document.getElementById('mlSortBtn');if(b)b.textContent=mlSortAsc?'📅 舊→新':'📅 新→舊';const a=document.getElementById('mlSortArrow');if(a)a.textContent=mlSortAsc?'↑':'↓';renderMealTable();}
 function renderMealTable(){
-  const fv=document.getElementById('mlFilter')?.value||'';
-  const sv=(document.getElementById('mlSearch')?.value||'').trim().toLowerCase();
+  const fv=(document.getElementById('mlFilter')||{}).value||'';
+  const sv=((document.getElementById('mlSearch')||{}).value||'').trim().toLowerCase();
   const balMap=getMealRunningBal();
   let recs=[...(state.mealCard.records||[])];
   if(fv==='topup')recs=recs.filter(r=>(r.topup||0)>0);
@@ -871,14 +885,14 @@ function submitMeal(){
   const date=document.getElementById('mlDate').value;if(!date){toast('請選擇日期','err');return;}
   let topup=0,topupBy='',swipe=0,swipeBy='',visitor='',item='';
   if(isTopup){
-    topup=parseInt(document.getElementById('mlTopupAmt')?.value)||0;
-    topupBy=document.getElementById('mlTopupBy')?.value.trim()||'';
+    topup=parseInt((document.getElementById('mlTopupAmt')||{}).value)||0;
+    topupBy=((document.getElementById('mlTopupBy')||{}).value||'').trim()||'';
     if(topup<1){toast('請填儲值金額','err');return;}if(!topupBy){toast('請填儲值人','err');return;}
   }else{
-    swipe=parseInt(document.getElementById('mlSwipeAmt')?.value)||0;
-    swipeBy=document.getElementById('mlSwipeBy')?.value.trim()||'';
-    visitor=document.getElementById('mlVisitor')?.value.trim()||'';
-    item=document.getElementById('mlItem')?.value.trim()||'';
+    swipe=parseInt((document.getElementById('mlSwipeAmt')||{}).value)||0;
+    swipeBy=((document.getElementById('mlSwipeBy')||{}).value||'').trim()||'';
+    visitor=((document.getElementById('mlVisitor')||{}).value||'').trim()||'';
+    item=((document.getElementById('mlItem')||{}).value||'').trim()||'';
     if(swipe<1){toast('請填刷卡金額','err');return;}if(!swipeBy){toast('請填刷卡人','err');return;}
   }
   const note=document.getElementById('mlNote').value.trim();
@@ -979,7 +993,7 @@ function openAdjStat(id){const s=(state.supplies.stationery||[]).find(x=>x.id===
 function applyStatAdj(id){const s=(state.supplies.stationery||[]).find(x=>x.id===id);if(!s)return;s.qty=parseInt(document.getElementById('fSQ').value)||0;save();closeM();renderStat();toast('已更新');}
 function deleteStat(id){if(!confirm('確定刪除？'))return;state.supplies.stationery=(state.supplies.stationery||[]).filter(x=>x.id!==id);save();renderStat();toast('已刪除');}
 function openAddStatModal(){openM(`<div class="m-hdr"><div class="m-title">新增文具</div><button class="m-close" onclick="closeM()">✕</button></div><div class="m-body"><div class="fg"><label class="fl">文具名稱 *</label><input class="inp" id="fASN" placeholder="名稱"></div><div class="fg"><label class="fl">初始數量</label><input class="inp" type="number" min="0" id="fASQ" value="0"></div><div class="fg"><label class="fl">圖片（選填）</label><input type="hidden" id="fStatImg"><input type="file" accept="image/*" id="fStatImgInput" style="display:none" onchange="prevStatImg(event)"><button class="btn btn-g btn-sm" onclick="document.getElementById('fStatImgInput').click()">📷 上傳圖片</button><div id="statImgPrev"></div></div><div class="fa"><button class="btn btn-g btn-sm" onclick="closeM()">取消</button><button class="btn btn-p btn-sm" onclick="addStat2()">新增</button></div></div>`);}
-function addStat2(){const name=document.getElementById('fASN').value.trim();if(!name){toast('請輸入名稱','err');return;}if(!state.supplies)state.supplies={equipment:[],stationery:[]};if(!state.supplies.stationery)state.supplies.stationery=[];const img=document.getElementById('fStatImg')?.value||'';state.supplies.stationery.push({id:'S'+Date.now(),name,qty:parseInt(document.getElementById('fASQ').value)||0,image:img,records:[]});save();closeM();renderStat();toast('文具已新增');}
+function addStat2(){const name=document.getElementById('fASN').value.trim();if(!name){toast('請輸入名稱','err');return;}if(!state.supplies)state.supplies={equipment:[],stationery:[]};if(!state.supplies.stationery)state.supplies.stationery=[];const img=(document.getElementById('fStatImg')||{}).value||'';state.supplies.stationery.push({id:'S'+Date.now(),name,qty:parseInt(document.getElementById('fASQ').value)||0,image:img,records:[]});save();closeM();renderStat();toast('文具已新增');}
 
 /* ═══ FUND ═══ */
 function renderFund(){
@@ -1021,15 +1035,66 @@ function addFund(){
 }
 function deleteFund(id){if(!confirm('確定刪除？'))return;state.fund.records=(state.fund.records||[]).filter(r=>r.id!==id);save();renderFund();toast('已刪除');}
 
+/* ═══ INTERACTION EFFECTS ═══ */
+
+/* #06 Ripple — event delegation on all .btn */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.btn');if(!b)return;
+  const sp=document.createElement('span');sp.className='rpl';
+  const r=b.getBoundingClientRect(),sz=Math.max(r.width,r.height)*2.2;
+  sp.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-r.left-sz/2}px;top:${e.clientY-r.top-sz/2}px`;
+  b.appendChild(sp);setTimeout(()=>sp.remove(),600);
+});
+
+/* #05 Shake helper — call shakeEl(id) or shakeEl(element) on validation failure */
+function shakeEl(id){
+  const el=typeof id==='string'?document.getElementById(id):id;
+  if(!el)return;
+  el.classList.remove('shake');void el.offsetWidth;
+  el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),500);
+}
+
+/* #13 Card stagger-in + #09 stat-num countUp on tab switch */
+function animCards(tab){
+  const selMap={
+    gifts:'#giftGrid .gift-card',
+    machines:'.mc-grid .mc',
+    mealcard:'.stat-row .stat-c',
+    supplies:'.stat-card-grid .stat-card',
+    fund:'.fund-sum .fstat'
+  };
+  const sel=selMap[tab];
+  if(sel){
+    document.querySelectorAll(sel).forEach((el,i)=>{
+      el.classList.remove('ci');void el.offsetWidth;
+      el.style.animationDelay=(i*0.05)+'s';
+      el.classList.add('ci');
+    });
+  }
+  /* countUp for .stat-num numbers */
+  document.querySelectorAll('#sec-'+tab+' .stat-num').forEach(el=>{
+    const target=parseInt(el.textContent.replace(/[^\d]/g,''))||0;
+    if(!target||target<2)return;
+    const prefix=el.textContent.replace(/[\d,]/g,'').trim();
+    el.textContent='0';
+    const st=performance.now();
+    (function tick(now){
+      const p=Math.min((now-st)/700,1);
+      el.textContent=Math.floor(p*target)+(prefix?' '+prefix:'');
+      if(p<1)requestAnimationFrame(tick);else el.textContent=target+(prefix?' '+prefix:'');
+    })(st);
+  });
+}
+
 /* ═══ INIT ═══ */
-function renderAll(){({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[curTab]?.();}
+function renderAll(){var _f=({gifts:renderGifts,machines:renderMachines,mealcard:renderMealCard,supplies:renderSupplies,fund:renderFund})[curTab];if(_f)_f();}
 function init(){
   const d=new Date();
   document.getElementById('hdrDate').textContent=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' ('+['日','一','二','三','四','五','六'][d.getDay()]+')';
   try{const s=localStorage.getItem(SKEY);if(s)state=mergeRemote(JSON.parse(s));}catch(_){}
   renderAll();
   loadData(true);
-  setInterval(()=>loadData(false),30000);
+  setInterval(function(){loadData(false)},120000);
 }
 init();
 </script>
